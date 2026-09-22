@@ -24,46 +24,47 @@ header img{
 
 header{
 	position: fixed;
+	top: 0;
+	left: 0;
+	z-index: 1000;
 	background: -webkit-linear-gradient(#0faeb5ba, #fff);
 	background: linear-gradient(to right bottom, #0faeb5ba, #fff);
-	margin-top: -1.5%;
-	margin-left: -0.6%;
-	margin-right: -0.6%;
-	width: 20%;
-	height: 102%;
-	display: inline-block;
+	margin: 0;
+	width: 100%;
+	height: 60px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 	box-sizing: border-box;
-	float: left;
-	object-position: center;
-	text-align: center;
+	padding: 0 20px;
 }
 
 nav li{
 	position: static;
 	display: inline-block;
-	width: 99vw;
-	margin-bottom: 40px;
+	width: auto;
+	margin-bottom: 0;
+	margin-left: 10px;
+	margin-right: 10px;
 	text-align: center;
 	object-position: center;
-
 }
 
 nav li a{
 	font-family: "Trebuchet MS", Helvetica, sans-serif;
 	font-size: 0.9em;
 	display: block;
-	padding: 5px 20px 5px 20px;
+	padding: 8px 16px;
 
 	object-position: center;
 	text-align: center;
 	color: #111;
 	text-decoration: none;
 	border-radius: 5px;
-	width: 10em;
-
+	width: auto;
 
 	position: relative;
-	left: 2vh;
+	left: 0;
 
 	display: block;
 }
@@ -155,17 +156,26 @@ nav a:hover:after{
 }
 
 .active-menu-nav-item, header nav{
-	border: 5px solid gray;
-	box-shadow: 0 0 0px #ffffff;
-	border-width: 1px 0px;
-	font-size: 20px;
-	margin-bottom: -1%;
-	display: block;
-	width: 20%;
+	border: none;
+	box-shadow: none;
+	font-size: 16px;
+	margin-bottom: 0;
+	display: flex;
+	width: auto;
 	object-position: center;
-	position: fixed;
-	top: 45vh;
-	left: 0vh;	
+	position: static;
+	top: auto;
+	left: auto;	
+}
+
+header nav ul {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;
+	list-style: none;
+	margin: 0;
+	padding: 0;
 }
 
 .active-menu-nav-item:after{
@@ -175,10 +185,10 @@ nav a:hover:after{
 }
 
 main{
-	/*position: static;*/
 	text-align: left;
-	width: 80%;
-	float: right;
+	width: 100%;
+	float: none;
+	padding-top: 60px;
 }
 
 
@@ -190,11 +200,11 @@ main{
 	border-width: 1px 0px;
 }
 
-#about{
+#home, #about{
 	border-top: 0px;
 }
 
-#about a{
+#home a, #about a{
 	text-decoration: none;
 }
 
@@ -225,11 +235,11 @@ h2{
 	color: #ff8300;
 }
 
-#about > h3{
+#home > h3, #about > h3{
 	margin-bottom: 5%;
 }
 
-#about>div{
+#home>div, #about>div{
 	position: absolute;
 	margin-left: 3.7%;
 }
@@ -385,7 +395,7 @@ h2{
 	padding-left: 1%;
 }
 
-#about {
+#home {
 	padding-top: 25vh;
 }
 
@@ -770,7 +780,7 @@ section h3, section h4{
 	header{
 		display: block;
 		position: fixed;
-		margin-top: -20px;
+		top: 0;
 		padding: 0px 20px;
 		width: 100%;
 		height: calc(10vh);
@@ -800,10 +810,18 @@ section h3, section h4{
 	}
 
 	header nav, .active-menu-nav-item{
+		border: 5px solid gray;
+		box-shadow: 0 0 0px #ffffff;
+		border-width: 1px 0px;
+		font-size: 20px;
+		margin-bottom: -1%;
+		display: block;
+		width: 20%;
+
 		display: none;
 		position: absolute;
 		width: 100%;
-		height: calc(100vh-50px);
+		/* height: calc(100vh-50px); */
 		background: -webkit-linear-gradient(#0faeb5ba, #fff) !important;
 		background: linear-gradient(to right bottom, #0faeb5ba, #fff) !important;
 		top: 50px;
@@ -864,7 +882,7 @@ section h3, section h4{
 		transition-duration: 1s;
 	}
 
-	#about{
+	#home{
 		padding-top: 10vh;
 	}
 
@@ -974,15 +992,8 @@ section h3, section h4{
 }
 
 @media only screen and (max-width: 450px){
-	header{
-		width: 100%;
-		height: 50px;
-		margin-left: 0px;
-		margin-right: 0px;
-		position: fixed;
-		left: 0px;
-	}
 
+	
 	.page-container, .fullpage, #skills, #education{
 		width: 99vw;
 	}
@@ -998,7 +1009,7 @@ section h3, section h4{
 	}
 
 	nav li {
-		margin-bottom: 35px;
+		margin-bottom: 5px;
 		font-size: 17px;
   		font-weight: bold;
 		position: relative;
@@ -1006,7 +1017,7 @@ section h3, section h4{
 	}
 
 	nav li a {
-		position: fixed;
+		position: relative;
 		left: 1px;
 	}
 
