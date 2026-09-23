@@ -57,3 +57,33 @@ function showSlides(project, slide) {
 
   dots[slide - 1].classList.add("active-dot");
 }
+
+// Swipe left/right on the portfolio images for screens smaller than 700px
+const mobileQuery = window.matchMedia("(max-width: 700px)");
+const SWIPE_THRESHOLD = 50;
+
+Object.keys(slideIndexes).forEach(project => {
+  const firstSlide = document.querySelector(`.mySlides-${project}`);
+  if (!firstSlide) return;
+
+  const container = firstSlide.closest(".slideshow-container");
+  let startX = 0;
+  let startY = 0;
+
+  container.addEventListener("touchstart", e => {
+    startX = e.changedTouches[0].clientX;
+    startY = e.changedTouches[0].clientY;
+  }, { passive: true });
+
+  container.addEventListener("touchend", e => {
+    if (!mobileQuery.matches) return;
+
+    const deltaX = e.changedTouches[0].clientX - startX;
+    const deltaY = e.changedTouches[0].clientY - startY;
+
+    // Ignore short or mostly vertical gestures so page scrolling still works
+    if (Math.abs(deltaX) < SWIPE_THRESHOLD || Math.abs(deltaX) < Math.abs(deltaY)) return;
+
+    plusSlides(project, deltaX < 0 ? 1 : -1);
+  }, { passive: true });
+});

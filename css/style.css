@@ -1161,6 +1161,16 @@ section h3, section h4{
 		margin-bottom: 70px;
 	}
 
+	.prev, .next {
+		position: relative;
+		z-index: 2;
+	}
+
+	/* Allow vertical page scroll while horizontal swipes change the slide */
+	.slideshow-container {
+		touch-action: pan-y;
+	}
+
 	.dot {
 		position: relative;
 		top: 10px;
