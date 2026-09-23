@@ -56,6 +56,19 @@ function showSlides(project, slide) {
   slides[slide - 1].style.display = "block";
 
   dots[slide - 1].classList.add("active-dot");
+
+  preloadNeighbourSlides(slides, slide);
+}
+
+// Images are lazy loaded; fetch the previous and next slide early so arrows/swipes feel instant
+function preloadNeighbourSlides(slides, slide) {
+  const total = slides.length;
+  const neighbours = [slide % total, (slide - 2 + total) % total];
+
+  neighbours.forEach(i => {
+    const img = slides[i].querySelector("img");
+    if (img) img.loading = "eager";
+  });
 }
 
 const mobileQuery = window.matchMedia("(max-width: 900px)");
