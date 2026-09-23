@@ -6,21 +6,22 @@
 	<script src="https://kit.fontawesome.com/603fbe7749.js" crossorigin="anonymous"></script>
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 	<title>Angel Castellanos</title>
 </head>
 <body>
 	<header class="left">
-		<div>
-			<img src="img/profile/Profile31.jpg">
-		</div>
 		<nav id="menu-nav">
 			<ul>
-				<li><a href="#about" class="state" onclick="update(0)">About</a></li>
+				<li><a href="#home" class="state" onclick="update(0)">Home</a></li>
 				<li><a href="#experience" class="state" onclick="update(1)">Experience</a></li>
 				<li><a href="#education" class="state" onclick="update(2)">Education</a></li>
 				<li><a href="#skills" class="state" onclick="update(3)">Skills</a></li>
 				<li><a href="#section5" class="state" onclick="update(4)">Certifications</a></li>
 				<li><a href="#portfolio" class="state" onclick="update(5)">Portfolio</a></li>
+				<li><a href="#about" class="state" onclick="update(6)">About me</a></li>
 			</ul>
 		</nav>
 		<div class="menu-toggle">
@@ -29,13 +30,31 @@
 	</header>
 	<main>
 
-		<section id="about" class="fullpage page-container">
-			<h1>ANGEL CASTELLANOS</h1>
-			<h3>Full Stack Software Engineer</h3>
-			<p>I'm a technology enthusiast and I have a great interest in web development. </p>
-			<div class="ext-links">
-				<a href="https://github.com/Angel-Castel" class="fab fa-github"></a>
-				<a href="https://www.linkedin.com/in/angel-castellanos-rendon/" class="fab fa-linkedin"></a>
+		<section id="home" class="hero-section">
+			<div class="hero-bg-wrapper">
+				<img src="img/background/world.png" alt="Digital network globe background" class="hero-bg-img">
+				<div class="hero-overlay-horizontal"></div>
+				<div class="hero-overlay-vertical"></div>
+			</div>
+			<div class="hero-content">
+				<div class="hero-eyebrow">Software Development</div>
+				<h1 class="hero-title">
+					<span class="hero-title-primary">Quality Software</span>
+					<span class="hero-title-secondary">connected to the world</span>
+				</h1>
+				<p class="hero-subtitle">
+					From idea to deployment - I design and build the software your business needs to grow
+				</p>
+				<div class="hero-byline">
+					<span>Angel Castellanos</span>
+					<span class="hero-byline-dot">&middot;</span>
+					<span>Full Stack Software Engineer</span>
+				</div>
+				<div class="hero-cta-wrapper">
+					<a href="#portfolio" class="hero-cta-btn">
+						View my work <i class="fa-solid fa-arrow-right"></i>
+					</a>
+				</div>
 			</div>
 		</section>
 		<section id="experience" class="page-container">
@@ -541,6 +560,12 @@
 				<span class="dot-network-planning-system dot" onclick="showSlides('network-planning-system', 2)"></span>
 				<span class="dot-network-planning-system dot" onclick="showSlides('network-planning-system', 3)"></span>
 			</div>
+		</section>
+
+		<section id="about" class="page-container">
+			<h1>Angel Castellanos</h1>
+			<h3>Full Stack Software Engineer</h3>
+			<p>I am a technology enthusiast and Full Stack Software Engineer passionate about web development, continuous learning, and building innovative software solutions.</p>
 		</section>
 
 	</main>
