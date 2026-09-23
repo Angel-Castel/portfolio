@@ -58,8 +58,7 @@ function showSlides(project, slide) {
   dots[slide - 1].classList.add("active-dot");
 }
 
-// Swipe left/right on the portfolio images for screens smaller than 700px
-const mobileQuery = window.matchMedia("(max-width: 700px)");
+const mobileQuery = window.matchMedia("(max-width: 900px)");
 const SWIPE_THRESHOLD = 50;
 
 Object.keys(slideIndexes).forEach(project => {
