@@ -1214,19 +1214,22 @@ html:has(.xp-lightbox[open]) {
 		"groups stage";
 	gap: 24px 32px;
 	align-items: start;
+	/* Caps the cards at ~687px per column on very wide screens */
+	max-width: 1406px;
+	margin: 0 auto;
 }
 
+/* The column is a size container, so key glyphs and names scale with the space available */
 .sk-groups {
 	grid-area: groups;
+	container-type: inline-size;
 	display: flex;
 	flex-direction: column;
 	gap: 24px;
 	text-align: right;
 }
 
-/* Each group card is a size container, so key glyphs and names scale with the card's width */
 .sk-group {
-	container-type: inline-size;
 	transition: opacity 0.5s ease;
 }
 
@@ -1259,7 +1262,8 @@ html:has(.xp-lightbox[open]) {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	flex: 0 1 var(--sk-key-size);
+	flex: 0 1 auto;
+	width: var(--sk-key-size);
 	min-width: 0;
 	padding: 10px 0 8px;
 	transform-origin: 50% calc(var(--cap-top) + 32px);
@@ -1512,6 +1516,9 @@ html:has(.xp-lightbox[open]) {
 
 .sk-knowledge {
 	grid-area: knowledge;
+	justify-self: start;
+	width: fit-content;
+	max-width: 100%;
 	transition: opacity 0.5s ease;
 }
 
@@ -1529,11 +1536,16 @@ html:has(.xp-lightbox[open]) {
 	}
 }
 
-/* Phones: four keys per row */
+/* Phones: four keys per row, card content centered */
 @media only screen and (max-width: 700px) {
+	.sk-groups {
+		text-align: center;
+	}
+
 	.sk-keys {
 		--sk-key-gap: 14px;
 		flex-wrap: wrap;
+		justify-content: center;
 		row-gap: 14px;
 	}
 
