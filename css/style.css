@@ -1209,7 +1209,7 @@ html:has(.xp-lightbox[open]) {
 /* Skills - keycaps fly from a 3D keyboard (right) into grouped grids (left); see js/skills.js */
 .sk-layout {
 	display: grid;
-	grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+	grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
 	gap: 48px;
 	align-items: center;
 }
@@ -1237,18 +1237,21 @@ html:has(.xp-lightbox[open]) {
 .sk-keys {
 	display: flex;
 	flex-wrap: wrap;
-	gap: 22px 18px;
+	gap: 22px 10px;
 	list-style: none;
 	margin: 0;
 	padding: 0;
 }
 
+/* Keycap with its name underneath; wider than the cap so longer names fit */
 .sk-key {
 	position: relative;
-	display: block;
-	width: 64px;
-	height: 64px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	width: 74px;
 	padding: 0;
+	transform-origin: 50% 32px;
 }
 
 /* Glossy keycap: brand-colored face, darker skirt underneath, soft drop shadow */
@@ -1299,23 +1302,14 @@ html:has(.xp-lightbox[open]) {
 
 /* Name label, shown under the key on hover */
 .sk-name {
-	position: absolute;
-	top: calc(100% + 12px);
-	left: 50%;
-	z-index: 3;
-	transform: translate(-50%, -4px);
-	white-space: nowrap;
+	margin-top: 12px;
 	font-family: 'Inter', sans-serif;
 	font-size: 12px;
-	font-weight: 600;
-	color: #f7f9fb;
-	background: rgba(10, 18, 32, 0.95);
-	border: 1px solid color-mix(in srgb, var(--ring, var(--key)) 60%, transparent);
-	border-radius: 9999px;
-	padding: 4px 10px;
-	opacity: 0;
-	pointer-events: none;
-	transition: opacity 0.2s ease, transform 0.2s ease;
+	font-weight: 500;
+	line-height: 1.3;
+	text-align: center;
+	color: #a9b4c2;
+	transition: color 0.2s ease, opacity 0.3s ease;
 }
 
 .sk-key:hover {
@@ -1334,14 +1328,18 @@ html:has(.xp-lightbox[open]) {
 }
 
 .sk-key:hover .sk-name {
-	opacity: 1;
-	transform: translate(-50%, 0);
+	color: #f7f9fb;
+}
+
+/* Names stay hidden while the keys fly and fade in as each one lands */
+.sk-section.is-flying .sk-key:not(.is-landed) .sk-name {
+	opacity: 0;
 }
 
 /* Comet tail behind a flying key, pointing back toward where it came from */
 .sk-trail {
 	position: absolute;
-	top: 50%;
+	top: 32px;
 	left: 50%;
 	z-index: 0;
 	width: 150px;
@@ -1361,7 +1359,10 @@ html:has(.xp-lightbox[open]) {
 .sk-key::after {
 	content: "";
 	position: absolute;
-	inset: -6px;
+	top: -6px;
+	left: calc(50% - 38px);
+	width: 76px;
+	height: 76px;
 	border-radius: 18px;
 	border: 2px solid var(--ring, var(--key));
 	opacity: 0;
@@ -1505,6 +1506,21 @@ html:has(.xp-lightbox[open]) {
 
 	.sk-stage {
 		display: none;
+	}
+}
+
+/* Phones: slightly narrower keys so four fit per row with their names */
+@media only screen and (max-width: 700px) {
+	.sk-keys {
+		gap: 18px 8px;
+	}
+
+	.sk-key {
+		width: 74px;
+	}
+
+	.sk-name {
+		font-size: 11px;
 	}
 }
 

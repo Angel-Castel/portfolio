@@ -100,15 +100,19 @@
   function launchKeys() {
     // Read every position first, then start all animations (no interleaved layout reads).
     // Landing spots come from layout offsets, which ignore the hidden state's CSS transform.
+    // Positions are aligned on the keycap (the name label sits below it).
     const flights = keys.map(key => {
       const from = clones.get(key).getBoundingClientRect();
       const parent = key.offsetParent.getBoundingClientRect();
+      const cap = key.querySelector(".sk-cap");
       return {
         key,
-        dx: from.left + from.width / 2 - (parent.left + key.offsetLeft + key.offsetWidth / 2),
-        dy: from.top + from.height / 2 - (parent.top + key.offsetTop + key.offsetHeight / 2)
+        dx: from.left + from.width / 2 - (parent.left + key.offsetLeft + cap.offsetLeft + cap.offsetWidth / 2),
+        dy: from.top + from.height / 2 - (parent.top + key.offsetTop + cap.offsetTop + cap.offsetHeight / 2)
       };
     });
+
+    section.classList.add("is-flying");
 
     let remaining = flights.length;
 
