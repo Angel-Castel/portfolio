@@ -1488,8 +1488,9 @@ html:has(.xp-lightbox[open]) {
 	font-size: 17px;
 }
 
-.sk-board.is-empty .sk-cap {
-	opacity: 0;
+.sk-board.is-spent .sk-cap,
+.sk-board .sk-cap.is-spent {
+	filter: brightness(0.35) saturate(0.7);
 }
 
 .sk-knowledge {

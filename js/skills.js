@@ -1,5 +1,5 @@
 // Skills: on first view, the keyboard spins from the middle of the section to the right while shrinking, then
-// its keycaps fly like meteorites into the grouped grid.
+// its keycaps fly like meteorites into the grouped grid, leaving darkened copies behind on the keyboard.
 // Plays on every page load, once per load (scrolling back shows the settled grid); simplified on small screens
 // or with reduced motion.
 (function () {
@@ -43,7 +43,7 @@
 
   function showFinal() {
     section.classList.remove("is-armed");
-    board.classList.add("is-open", "is-empty");
+    board.classList.add("is-open", "is-spent");
   }
 
   if (reducedMotion.matches || !("IntersectionObserver" in window) || !Element.prototype.animate) {
@@ -93,7 +93,7 @@
   function fadeKeysIn() {
     stage.classList.remove("is-intro");
     section.classList.add("is-fading");
-    board.classList.add("is-open", "is-empty");
+    board.classList.add("is-open", "is-spent");
     requestAnimationFrame(() => section.classList.remove("is-armed"));
   }
 
@@ -109,6 +109,8 @@
         dy: from.top + from.height / 2 - (parent.top + key.offsetTop + key.offsetHeight / 2)
       };
     });
+
+    let remaining = flights.length;
 
     flights.forEach(({ key, dx, dy }, i) => {
       const delay = i * STAGGER;
@@ -131,19 +133,25 @@
         { opacity: 0 }
       ], { duration: FLIGHT * 0.9, delay });
 
-      // The copy on the keyboard lifts off as the real key launches, then stays hidden
+      // The copy on the keyboard flashes as the real key launches, then stays behind darkened
       const clone = clones.get(key);
-      const liftOff = clone.animate([
-        { opacity: 1, transform: "translateZ(10px)" },
-        { opacity: 0, transform: "translateZ(60px)" }
-      ], { duration: 220, delay, easing: "ease-out", fill: "forwards" });
+      const press = clone.animate([
+        { filter: "brightness(1) saturate(1)", transform: "translateZ(10px)" },
+        { filter: "brightness(1.5) saturate(1)", transform: "translateZ(18px)", offset: 0.2 },
+        { filter: "brightness(0.35) saturate(0.7)", transform: "translateZ(10px)" }
+      ], { duration: 400, delay, easing: "ease-out", fill: "forwards" });
 
-      liftOff.finished.then(() => {
-        clone.style.opacity = "0";
-        liftOff.cancel();
+      // .is-spent holds the same dark look as the last frame, so the animation can be released
+      press.finished.then(() => {
+        clone.classList.add("is-spent");
+        press.cancel();
       }, () => {});
 
-      flight.finished.then(() => key.classList.add("is-landed"), () => {});
+      flight.finished.then(() => {
+        key.classList.add("is-landed");
+        remaining -= 1;
+        if (remaining === 0) board.classList.add("is-spent");
+      }, () => {});
     });
 
     // Safe to unhide now: each key is held at its launch point (fill: backwards) until its delay ends
