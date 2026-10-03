@@ -778,7 +778,7 @@ section h3, section h4{
 	display: block;
 	overflow: hidden;
 	background-color: #050a12;
-	padding: 120px 0 140px;
+	padding: 16px 0 78px;
 	scroll-margin-top: 65px;
 }
 
@@ -1654,8 +1654,43 @@ html:has(.xp-lightbox[open]) {
 		margin-bottom: 16px;
 	}
 
+	/* Entries with a recognition image: move the image below the details card */
+	.xp-meta:has(.xp-figure) {
+		display: contents;
+	}
+
+	.xp-meta:has(.xp-figure) > * {
+		grid-column: 2;
+	}
+
+	.xp-meta:has(.xp-figure) > .xp-role {
+		grid-row: 1;
+	}
+
+	.xp-meta:has(.xp-figure) > .xp-company {
+		grid-row: 2;
+	}
+
+	.xp-meta:has(.xp-figure) > .xp-dates {
+		grid-row: 3;
+		margin-bottom: 16px;
+	}
+
+	.xp-meta:has(.xp-figure) ~ .xp-details {
+		grid-row: 4;
+	}
+
+	.xp-meta:has(.xp-figure) > .xp-figure {
+		grid-row: 5;
+	}
+
 	.xp-figure {
 		margin: 24px 0 0;
+	}
+
+	/* Full brightness on mobile (no hover to reveal it) */
+	.xp-figure-trigger img {
+		filter: none;
 	}
 
 	.xp-details,
