@@ -224,11 +224,6 @@ main{
 	text-decoration: none;
 }
 
-.frame-languages {
-	margin-bottom: 20px;
-  	display: inline-block;
-}
-
 h1, h2, h3, p, li{
 	padding-left: 5%;
 	font-family: 'Inter', sans-serif;
@@ -274,17 +269,6 @@ p, li{
 	position: absolute;
 }
 
-#skills>div{
-	position: relative;
-	margin-left: 5%;
-}
-
-.icon-img{
-	display: inline-block;
-	text-align: center;
-	width: 105px;
-}
-
 .fab,.fas,.fa-brands{
 	position: relative;
 	margin-right: 70px;
@@ -294,61 +278,12 @@ p, li{
 	display: inline-block;
 }
 
-.fab>p,.fas>p,.fa-brands>p{
-	font-size: 15px;
-	width: 90px;
-	padding-left: 0%;
-	text-align: center;
-	color: #cbd5e1;
-}
-
-.long-frame-p{
-	width: max-content;
-}
-
-.frame-p {
-	color: #cbd5e1;
-}
-
-.fas>p{
-	color: #cbd5e1;
-}
-
-
-#skills>div>.fab,
-#skills>div>.fas,
-#skills>div>.fa-brands{
-	margin-right: 0px;
-	color: #cbd5e1;
-}
-
 .fa-github{
 	color: #f1f5f9 !important;
 }
 
 .fa-linkedin{
 	color: #38bdf8 !important;
-}
-
-.fa-angular{
-	color: rgb(244, 63, 94) !important;
-}
-
-.fa-react{
-	color: rgb(56, 189, 248) !important;
-}
-
-.fa-node{
-	color: rgb(74, 222, 128) !important;
-}
-
-.icon-img img{
-	height: 46px;
-  	width: 46px;
-}
-
-#skills>h2{
-	margin-bottom: 20px;
 }
 
 .box{
@@ -587,16 +522,6 @@ p, li{
 	border-width: 1px 0px;
 }
 
-#skills {
-	height: 100vh !important;
-	margin-top: 30px;
-	height: fit-content;
-	border-top: 1px solid gray;
-	border-bottom: 1px solid gray;
-	border-width: 1px 0px;
-	margin-bottom: 30px;
-}
-
 .row{
 	font-family: Garamond , sans-serif;
 	display: inline-block;
@@ -753,18 +678,13 @@ section h3, section h4{
 	display: none;
 }
 
-#skills ul{
+#skills .sk-knowledge ul{
 	padding-left: 7%;
 }
 
-#skills ul li p{
+#skills .sk-knowledge ul li p{
 	padding-left: 0;
 	color: #cbd5e1;
-}
-
-#skills ul ul{
-	padding-left: 3%;
-	margin-bottom: 40px;
 }
 
 /* Experience - scroll-driven timeline */
@@ -1286,6 +1206,314 @@ html:has(.xp-lightbox[open]) {
 	}
 }
 
+/* Skills - keycaps fly from a 3D keyboard (right) into grouped grids (left); see js/skills.js */
+.sk-layout {
+	display: grid;
+	grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+	gap: 48px;
+	align-items: center;
+}
+
+.sk-groups {
+	display: flex;
+	flex-direction: column;
+	gap: 40px;
+}
+
+.sk-group {
+	display: block;
+}
+
+.xp-section .sk-group-title {
+	font-family: 'Manrope', sans-serif;
+	font-size: 19px;
+	font-weight: 600;
+	color: #f1f5f9;
+	margin: 0 0 18px;
+	padding: 0;
+	transition: opacity 0.5s ease;
+}
+
+.sk-keys {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 22px 18px;
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.sk-key {
+	position: relative;
+	display: block;
+	width: 64px;
+	height: 64px;
+	padding: 0;
+}
+
+/* Glossy keycap: brand-colored face, darker skirt underneath, soft drop shadow */
+.sk-cap {
+	position: relative;
+	z-index: 1;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 64px;
+	height: 64px;
+	border-radius: 14px;
+	color: var(--glyph);
+	background: linear-gradient(155deg, color-mix(in srgb, var(--key) 65%, #fff) 0%, var(--key) 42%, color-mix(in srgb, var(--key) 70%, #000) 100%);
+	box-shadow:
+		inset 0 2px 0 rgba(255, 255, 255, 0.35),
+		inset 0 -5px 0 rgba(0, 0, 0, 0.22),
+		0 5px 0 color-mix(in srgb, var(--key) 50%, #000),
+		0 10px 18px rgba(0, 0, 0, 0.5);
+	transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.sk-cap::before {
+	content: "";
+	position: absolute;
+	inset: 4px 6px 50% 6px;
+	border-radius: 10px 10px 18px 18px;
+	background: linear-gradient(to bottom, rgba(255, 255, 255, 0.35), rgba(255, 255, 255, 0));
+	pointer-events: none;
+}
+
+.sk-cap i {
+	position: relative;
+	margin: 0;
+	font-size: 28px;
+	color: inherit;
+	text-shadow: 0 1px 0 rgba(0, 0, 0, 0.25);
+}
+
+.sk-legend {
+	position: relative;
+	font-family: 'Manrope', sans-serif;
+	font-size: 20px;
+	font-weight: 800;
+	letter-spacing: 0.5px;
+	text-shadow: 0 1px 0 rgba(0, 0, 0, 0.25);
+}
+
+/* Name label, shown under the key on hover */
+.sk-name {
+	position: absolute;
+	top: calc(100% + 12px);
+	left: 50%;
+	z-index: 3;
+	transform: translate(-50%, -4px);
+	white-space: nowrap;
+	font-family: 'Inter', sans-serif;
+	font-size: 12px;
+	font-weight: 600;
+	color: #f7f9fb;
+	background: rgba(10, 18, 32, 0.95);
+	border: 1px solid color-mix(in srgb, var(--ring, var(--key)) 60%, transparent);
+	border-radius: 9999px;
+	padding: 4px 10px;
+	opacity: 0;
+	pointer-events: none;
+	transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.sk-key:hover {
+	z-index: 5;
+}
+
+.sk-key:hover .sk-cap {
+	transform: translateY(-4px) scale(1.1);
+	box-shadow:
+		inset 0 2px 0 rgba(255, 255, 255, 0.35),
+		inset 0 -5px 0 rgba(0, 0, 0, 0.22),
+		0 5px 0 color-mix(in srgb, var(--key) 50%, #000),
+		0 0 0 2px var(--ring, var(--key)),
+		0 0 26px 4px color-mix(in srgb, var(--ring, var(--key)) 70%, transparent),
+		0 14px 24px rgba(0, 0, 0, 0.55);
+}
+
+.sk-key:hover .sk-name {
+	opacity: 1;
+	transform: translate(-50%, 0);
+}
+
+/* Comet tail behind a flying key, pointing back toward where it came from */
+.sk-trail {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	z-index: 0;
+	width: 150px;
+	height: 16px;
+	margin-top: -8px;
+	border-radius: 9999px;
+	background: linear-gradient(to right, color-mix(in srgb, var(--ring, var(--key)) 80%, #fff) 0%, color-mix(in srgb, var(--ring, var(--key)) 55%, transparent) 35%, transparent 100%);
+	clip-path: polygon(0 0, 100% 45%, 100% 55%, 0 100%);
+	filter: blur(3px);
+	transform-origin: 0 50%;
+	transform: rotate(var(--trail-angle, 0rad));
+	opacity: 0;
+	pointer-events: none;
+}
+
+/* Landing: squash-and-settle with a flash, plus a ring puffing outward */
+.sk-key::after {
+	content: "";
+	position: absolute;
+	inset: -6px;
+	border-radius: 18px;
+	border: 2px solid var(--ring, var(--key));
+	opacity: 0;
+	pointer-events: none;
+}
+
+.sk-key.is-landed .sk-cap {
+	animation: sk-settle 0.45s cubic-bezier(0.3, 1.6, 0.5, 1) 1;
+}
+
+.sk-key.is-landed::after {
+	animation: sk-puff 0.6s ease-out 1;
+}
+
+@keyframes sk-settle {
+	0% {
+		transform: scale(1.15, 0.85);
+		filter: brightness(1.6);
+	}
+	45% {
+		transform: scale(0.94, 1.06);
+	}
+	100% {
+		transform: scale(1);
+		filter: brightness(1);
+	}
+}
+
+@keyframes sk-puff {
+	0% {
+		opacity: 0.9;
+		transform: scale(0.85);
+		box-shadow: 0 0 18px var(--ring, var(--key));
+	}
+	100% {
+		opacity: 0;
+		transform: scale(1.5);
+		box-shadow: 0 0 0 transparent;
+	}
+}
+
+/* Hidden until the reveal plays (class added by JS, so the grid shows without JS) */
+.sk-section.is-armed .sk-key {
+	opacity: 0;
+	transform: translateY(18px) scale(0.9);
+}
+
+.sk-section.is-armed .sk-group-title {
+	opacity: 0;
+}
+
+/* Small screens: keys simply fade and settle into place, staggered */
+.sk-section.is-fading .sk-key {
+	transition: opacity 0.5s ease, transform 0.55s cubic-bezier(0.3, 1.4, 0.5, 1);
+	transition-delay: calc(var(--i, 0) * 45ms);
+}
+
+/* The keyboard: isometric plate of sockets holding copies of the keycaps */
+.sk-stage {
+	position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	min-height: 460px;
+	perspective: 1600px;
+	transition: transform 1.6s cubic-bezier(0.45, 0.05, 0.25, 1);
+}
+
+/* Intro: keyboard starts large in the middle of the section (--intro-x is set by JS) */
+.sk-stage.is-intro {
+	transform: translateX(var(--intro-x, 0px)) scale(1.45);
+}
+
+.sk-board {
+	--cap: 56px;
+	display: grid;
+	grid-template-columns: repeat(5, var(--cap));
+	gap: 12px;
+	padding: 22px;
+	border-radius: 22px;
+	background: linear-gradient(160deg, #1c2638, #0b111c);
+	box-shadow:
+		0 0 0 1px rgba(255, 255, 255, 0.06),
+		inset 0 1px 0 rgba(255, 255, 255, 0.08),
+		0 40px 70px rgba(0, 0, 0, 0.65),
+		0 0 60px rgba(103, 232, 249, 0.08);
+	transform-style: preserve-3d;
+	transform: rotateY(0deg) rotateX(52deg) rotateZ(-38deg);
+	transition: transform 1.6s cubic-bezier(0.45, 0.05, 0.25, 1);
+}
+
+/* Same function list in every state, so -398deg -> -38deg animates as one full clockwise turn */
+.sk-board.is-open {
+	transform: rotateY(28deg) rotateX(52deg) rotateZ(-38deg);
+}
+
+.sk-stage.is-intro .sk-board {
+	transform: rotateY(0deg) rotateX(52deg) rotateZ(-398deg);
+}
+
+.sk-socket {
+	position: relative;
+	display: block;
+	width: var(--cap);
+	height: var(--cap);
+	border-radius: 12px;
+	background: #070b12;
+	box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.8), inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+	transform-style: preserve-3d;
+}
+
+.sk-board .sk-cap {
+	width: var(--cap);
+	height: var(--cap);
+	border-radius: 12px;
+	transform: translateZ(10px);
+}
+
+.sk-board .sk-cap i {
+	font-size: 24px;
+}
+
+.sk-board .sk-legend {
+	font-size: 17px;
+}
+
+.sk-board.is-empty .sk-cap {
+	opacity: 0;
+}
+
+.sk-knowledge {
+	display: block;
+	margin-top: 64px;
+}
+
+@media only screen and (max-width: 990px) {
+	.sk-layout {
+		grid-template-columns: 1fr;
+	}
+
+	.sk-stage {
+		display: none;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.sk-cap,
+	.sk-name {
+		transition: none;
+	}
+}
+
 .project {
 	background: rgba(15, 23, 42, 0.9);
 	border: 1px solid rgba(255, 255, 255, 0.1);
@@ -1431,13 +1659,6 @@ html:has(.xp-lightbox[open]) {
 	from {opacity: .4}
 	to {opacity: 1}
   }
-
-@media only screen and (max-height: 890px){
-	#skills {
-		height: fit-content !important;
-		padding-bottom: 50px;
-	}
-}
 
 @media only screen and (max-width: 990px){
 	header{
@@ -1886,25 +2107,6 @@ html:has(.xp-lightbox[open]) {
 	.next{
 		padding-right: 5px;
 		margin-top: -38%;
-	}
-
-	.frame-languages {
-		width: 90vw;
-	}
-
-	.fa-brands{
-		font-size: 36px;
-		width: 81px;
-	}
-
-	.icon-img{
-		width: fit-content;
-    	margin-right: 21px;
-	}
-
-	.icon-img img{
-		height: 36px;
-		width: 36px;
 	}
 
 	#section5 .row{
