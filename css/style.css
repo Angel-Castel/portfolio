@@ -347,23 +347,8 @@ p, li{
   	width: 46px;
 }
 
-#education>h2{
-	margin-bottom: 5%;
-}
-
 #skills>h2{
 	margin-bottom: 20px;
-}
-
-#education h3{
-	margin-bottom: 10px;
-	color: #f1f5f9;
-}
-
-#education p{
-	margin-top: 0px;
-	margin-bottom: 5%;
-	color: #94a3b8;
 }
 
 .box{
@@ -783,7 +768,7 @@ section h3, section h4{
 }
 
 /* Experience - scroll-driven timeline */
-#experience {
+.xp-section {
 	--xp-amber: #f2a54a;
 	--xp-amber-hot: #ffd38a;
 	--xp-amber-deep: #d97757;
@@ -835,7 +820,7 @@ section h3, section h4{
 	margin-bottom: 72px;
 }
 
-#experience .xp-eyebrow {
+.xp-section .xp-eyebrow {
 	font-family: 'Inter', sans-serif;
 	font-size: 14px;
 	font-weight: 600;
@@ -847,7 +832,7 @@ section h3, section h4{
 	text-align: center;
 }
 
-#experience .xp-title {
+.xp-section .xp-title {
 	font-family: 'Manrope', sans-serif;
 	font-size: 44px;
 	font-weight: 800;
@@ -991,17 +976,23 @@ section h3, section h4{
 	}
 }
 
-#experience .xp-role {
+.xp-section .xp-role {
 	font-family: 'Manrope', sans-serif;
 	font-size: 24px;
 	font-weight: 700;
 	line-height: 1.25;
-	color: #f7f9fb;
 	margin: 0 0 6px;
 	padding: 0;
+	/* Same animated gradient text as the name in the About section (global h1) */
+	color: transparent;
+	background-image: linear-gradient(to right, #f00, #ff0, #0f0, #00f);
+	background-size: 1000%;
+	background-clip: text;
+	-webkit-background-clip: text;
+	animation: animate 20s linear infinite;
 }
 
-#experience .xp-company {
+.xp-section .xp-company {
 	font-family: 'Inter', sans-serif;
 	font-size: 16px;
 	font-weight: 500;
@@ -1011,7 +1002,7 @@ section h3, section h4{
 	text-align: inherit;
 }
 
-#experience .xp-dates {
+.xp-section .xp-dates {
 	font-family: 'Inter', sans-serif;
 	font-size: 12px;
 	font-weight: 600;
@@ -1023,7 +1014,67 @@ section h3, section h4{
 	text-align: inherit;
 }
 
-#experience .xp-subhead {
+/* Compact entries (Education): one short line on each side of the node */
+.xp-timeline--compact {
+	gap: 120px;
+	padding: 48px 0;
+}
+
+.xp-entry--compact {
+	align-items: center;
+}
+
+.xp-entry--compact .xp-node {
+	margin-top: 0;
+}
+
+.xp-school {
+	grid-column: 3;
+	grid-row: 1;
+	text-align: left;
+	padding-left: 8px;
+}
+
+.xp-entry--alt .xp-school {
+	grid-column: 1;
+	text-align: right;
+	padding-left: 0;
+	padding-right: 8px;
+}
+
+.xp-section .xp-degree {
+	font-family: 'Manrope', sans-serif;
+	font-size: 24px;
+	font-weight: 700;
+	line-height: 1.3;
+	color: #f7f9fb;
+	margin: 0;
+	padding: 0;
+}
+
+.xp-section .xp-school-line {
+	font-family: 'Inter', sans-serif;
+	font-size: 15px;
+	font-weight: 500;
+	color: #a9b4c2;
+	margin: 0;
+	padding: 0;
+	text-align: inherit;
+}
+
+.xp-school-sep {
+	color: #3f4b5c;
+	font-weight: 700;
+	margin: 0 4px;
+}
+
+.xp-school-date {
+	color: #5eead4;
+	font-weight: 600;
+	letter-spacing: 1px;
+}
+
+.xp-section .xp-subhead {
 	font-family: 'Inter', sans-serif;
 	font-size: 12px;
 	font-weight: 600;
@@ -1034,17 +1085,17 @@ section h3, section h4{
 	padding: 0;
 }
 
-#experience .xp-list {
+.xp-section .xp-list {
 	list-style: none;
 	margin: 0 0 24px;
 	padding: 0;
 }
 
-#experience .xp-list:last-child {
+.xp-section .xp-list:last-child {
 	margin-bottom: 0;
 }
 
-#experience .xp-list li {
+.xp-section .xp-list li {
 	position: relative;
 	font-family: 'Inter', sans-serif;
 	font-size: 15px;
@@ -1054,7 +1105,7 @@ section h3, section h4{
 	padding: 0 0 0 18px;
 }
 
-#experience .xp-list li::before {
+.xp-section .xp-list li::before {
 	content: "";
 	position: absolute;
 	left: 0;
@@ -1224,7 +1275,8 @@ html:has(.xp-lightbox[open]) {
 	}
 
 	.xp-node.is-active::after,
-	.xp-lightbox[open] {
+	.xp-lightbox[open],
+	.xp-section .xp-role {
 		animation: none;
 	}
 
@@ -1558,7 +1610,7 @@ html:has(.xp-lightbox[open]) {
 	}
 
 	/* Experience: single column, line on the left edge */
-	#experience {
+	.xp-section {
 		padding: 80px 0 100px;
 	}
 
@@ -1570,7 +1622,7 @@ html:has(.xp-lightbox[open]) {
 		margin-bottom: 48px;
 	}
 
-	#experience .xp-title {
+	.xp-section .xp-title {
 		font-size: 32px;
 	}
 
@@ -1613,12 +1665,33 @@ html:has(.xp-lightbox[open]) {
 		padding: 18px;
 	}
 
-	#experience .xp-role {
+	.xp-section .xp-role {
 		font-size: 20px;
 	}
 
-	#experience .xp-list li {
+	.xp-section .xp-list li {
 		font-size: 14px;
+	}
+
+	.xp-timeline--compact {
+		gap: 64px;
+		padding: 24px 0;
+	}
+
+	.xp-entry--compact .xp-meta {
+		margin-bottom: 6px;
+	}
+
+	.xp-school,
+	.xp-entry--alt .xp-school {
+		grid-column: 2;
+		grid-row: 2;
+		text-align: left;
+		padding: 0;
+	}
+
+	.xp-section .xp-degree {
+		font-size: 20px;
 	}
 
 	.dot-container{

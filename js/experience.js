@@ -1,9 +1,6 @@
-// Experience timeline: the gold line fills top-down as the user scrolls through the section
-(function () {
-  const section = document.getElementById("experience");
-  const timeline = section && section.querySelector(".xp-timeline");
-  if (!timeline) return;
-
+// Timelines (Experience, Education): the gold line fills top-down as the user scrolls through the section
+document.querySelectorAll(".xp-section .xp-timeline").forEach(timeline => {
+  const section = timeline.closest(".xp-section");
   const lit = timeline.querySelector(".xp-line-lit");
   const head = timeline.querySelector(".xp-line-head");
   const nodes = Array.from(timeline.querySelectorAll(".xp-node"));
@@ -70,7 +67,7 @@
 
   measure();
   update();
-})();
+});
 
 // Recognition images: click opens an enlarged view in a native modal <dialog>
 (function () {
