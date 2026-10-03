@@ -56,9 +56,10 @@
   // Offset from the keyboard's resting spot (right column) to the middle of the section.
   // Layout offsets ignore transforms, so this stays correct while the intro transform is applied.
   function placeIntro() {
-    const layoutCenter = layout.offsetLeft + layout.offsetWidth / 2;
-    const stageCenter = stage.offsetLeft + stage.offsetWidth / 2;
-    stage.style.setProperty("--intro-x", `${layoutCenter - stageCenter}px`);
+    const dx = (layout.offsetLeft + layout.offsetWidth / 2) - (stage.offsetLeft + stage.offsetWidth / 2);
+    const dy = (layout.offsetTop + layout.offsetHeight / 2) - (stage.offsetTop + stage.offsetHeight / 2);
+    stage.style.setProperty("--intro-x", `${dx}px`);
+    stage.style.setProperty("--intro-y", `${dy}px`);
   }
 
   if (desktop.matches) {

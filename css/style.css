@@ -678,15 +678,6 @@ section h3, section h4{
 	display: none;
 }
 
-#skills .sk-knowledge ul{
-	padding-left: 7%;
-}
-
-#skills .sk-knowledge ul li p{
-	padding-left: 0;
-	color: #cbd5e1;
-}
-
 /* Experience - scroll-driven timeline */
 .xp-section {
 	--xp-amber: #f2a54a;
@@ -737,7 +728,7 @@ section h3, section h4{
 .xp-heading {
 	display: block;
 	text-align: center;
-	margin-bottom: 72px;
+	margin-bottom: 30px;
 }
 
 .xp-section .xp-eyebrow {
@@ -833,10 +824,16 @@ section h3, section h4{
 .xp-details {
 	grid-column: 3;
 	grid-row: 1;
+}
+
+/* Shared card container: Experience details, Skills groups and Knowledge */
+.xp-card {
+	display: block;
 	background: rgba(10, 18, 32, 0.6);
 	border: 1px solid rgba(255, 255, 255, 0.06);
 	border-radius: 14px;
 	padding: 24px 28px;
+	box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
 }
 
 .xp-entry--alt .xp-meta {
@@ -1207,51 +1204,65 @@ html:has(.xp-lightbox[open]) {
 }
 
 /* Skills - keycaps fly from a 3D keyboard (right) into grouped grids (left); see js/skills.js */
+/* Two columns, each under half the width: keys card on the left; Knowledge above the keyboard on the right */
 .sk-layout {
 	display: grid;
-	grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
-	gap: 48px;
-	align-items: center;
+	grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+	grid-template-rows: auto 1fr;
+	grid-template-areas:
+		"groups knowledge"
+		"groups stage";
+	gap: 24px 32px;
+	align-items: start;
 }
 
 .sk-groups {
+	grid-area: groups;
 	display: flex;
 	flex-direction: column;
-	gap: 40px;
+	gap: 24px;
+	text-align: right;
 }
 
+/* Each group card is a size container, so key glyphs and names scale with the card's width */
 .sk-group {
-	display: block;
-}
-
-.xp-section .sk-group-title {
-	font-family: 'Manrope', sans-serif;
-	font-size: 19px;
-	font-weight: 600;
-	color: #f1f5f9;
-	margin: 0 0 18px;
-	padding: 0;
+	container-type: inline-size;
 	transition: opacity 0.5s ease;
 }
 
+/* Group labels use the shared .xp-subhead style */
+.xp-section .sk-group-title {
+	margin-bottom: 18px;
+}
+
+/* Key rows, aligned to the right edge of each card; the 8 secondary skills fit on one row.
+   Key spacing is controlled here:
+   --sk-key-size = width of each key (the keycap is at most 64px)
+   --sk-key-gap  = horizontal space between keys
+   Keys shrink below --sk-key-size when the card is too narrow. */
 .sk-keys {
+	--sk-key-size: 64px;
+	--sk-key-gap: 13px;
 	display: flex;
-	flex-wrap: wrap;
-	gap: 22px 10px;
+	justify-content: flex-end;
+	gap: 16px var(--sk-key-gap);
 	list-style: none;
 	margin: 0;
 	padding: 0;
 }
 
-/* Keycap with its name underneath; wider than the cap so longer names fit */
+/* Keycap with its name underneath; wider than the cap so longer names fit.
+   --cap-top (top padding) keeps the trail, landing ring and flight pivot centered on the cap. */
 .sk-key {
+	--cap-top: 10px;
 	position: relative;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	width: 74px;
-	padding: 0;
-	transform-origin: 50% 32px;
+	flex: 0 1 var(--sk-key-size);
+	min-width: 0;
+	padding: 10px 0 8px;
+	transform-origin: 50% calc(var(--cap-top) + 32px);
 }
 
 /* Glossy keycap: brand-colored face, darker skirt underneath, soft drop shadow */
@@ -1261,8 +1272,9 @@ html:has(.xp-lightbox[open]) {
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	width: 64px;
-	height: 64px;
+	width: 100%;
+	max-width: 64px;
+	aspect-ratio: 1;
 	border-radius: 14px;
 	color: var(--glyph);
 	background: linear-gradient(155deg, color-mix(in srgb, var(--key) 65%, #fff) 0%, var(--key) 42%, color-mix(in srgb, var(--key) 70%, #000) 100%);
@@ -1286,7 +1298,7 @@ html:has(.xp-lightbox[open]) {
 .sk-cap i {
 	position: relative;
 	margin: 0;
-	font-size: 28px;
+	font-size: clamp(22px, 4.5cqi, 28px);
 	color: inherit;
 	text-shadow: 0 1px 0 rgba(0, 0, 0, 0.25);
 }
@@ -1294,7 +1306,7 @@ html:has(.xp-lightbox[open]) {
 .sk-legend {
 	position: relative;
 	font-family: 'Manrope', sans-serif;
-	font-size: 20px;
+	font-size: clamp(14px, 3.2cqi, 20px);
 	font-weight: 800;
 	letter-spacing: 0.5px;
 	text-shadow: 0 1px 0 rgba(0, 0, 0, 0.25);
@@ -1304,7 +1316,7 @@ html:has(.xp-lightbox[open]) {
 .sk-name {
 	margin-top: 12px;
 	font-family: 'Inter', sans-serif;
-	font-size: 12px;
+	font-size: clamp(9px, 1.95cqi, 12px);
 	font-weight: 500;
 	line-height: 1.3;
 	text-align: center;
@@ -1339,7 +1351,7 @@ html:has(.xp-lightbox[open]) {
 /* Comet tail behind a flying key, pointing back toward where it came from */
 .sk-trail {
 	position: absolute;
-	top: 32px;
+	top: calc(var(--cap-top) + 32px);
 	left: 50%;
 	z-index: 0;
 	width: 150px;
@@ -1359,7 +1371,7 @@ html:has(.xp-lightbox[open]) {
 .sk-key::after {
 	content: "";
 	position: absolute;
-	top: -6px;
+	top: calc(var(--cap-top) - 7px);
 	left: calc(50% - 38px);
 	width: 76px;
 	height: 76px;
@@ -1410,7 +1422,9 @@ html:has(.xp-lightbox[open]) {
 	transform: translateY(18px) scale(0.9);
 }
 
-.sk-section.is-armed .sk-group-title {
+/* The group cards and Knowledge wait until the keyboard has reached the right */
+.sk-section.is-armed .sk-group,
+.sk-section.is-armed .sk-knowledge {
 	opacity: 0;
 }
 
@@ -1422,18 +1436,20 @@ html:has(.xp-lightbox[open]) {
 
 /* The keyboard: isometric plate of sockets holding copies of the keycaps */
 .sk-stage {
+	grid-area: stage;
+	align-self: center;
 	position: relative;
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	min-height: 460px;
+	min-height: 420px;
 	perspective: 1600px;
 	transition: transform 1.6s cubic-bezier(0.45, 0.05, 0.25, 1);
 }
 
 /* Intro: keyboard starts large in the middle of the section (--intro-x is set by JS) */
 .sk-stage.is-intro {
-	transform: translateX(var(--intro-x, 0px)) scale(1.45);
+	transform: translate(var(--intro-x, 0px), var(--intro-y, 0px)) scale(1.45);
 }
 
 .sk-board {
@@ -1495,13 +1511,17 @@ html:has(.xp-lightbox[open]) {
 }
 
 .sk-knowledge {
-	display: block;
-	margin-top: 64px;
+	grid-area: knowledge;
+	transition: opacity 0.5s ease;
 }
 
 @media only screen and (max-width: 990px) {
 	.sk-layout {
 		grid-template-columns: 1fr;
+		grid-template-rows: auto;
+		grid-template-areas:
+			"groups"
+			"knowledge";
 	}
 
 	.sk-stage {
@@ -1509,18 +1529,28 @@ html:has(.xp-lightbox[open]) {
 	}
 }
 
-/* Phones: slightly narrower keys so four fit per row with their names */
+/* Phones: four keys per row */
 @media only screen and (max-width: 700px) {
 	.sk-keys {
-		gap: 18px 8px;
+		--sk-key-gap: 14px;
+		flex-wrap: wrap;
+		row-gap: 14px;
 	}
 
 	.sk-key {
-		width: 74px;
+		flex-shrink: 0;
 	}
 
 	.sk-name {
 		font-size: 11px;
+	}
+
+	.sk-cap i {
+		font-size: 28px;
+	}
+
+	.sk-legend {
+		font-size: 20px;
 	}
 }
 
@@ -1935,6 +1965,9 @@ html:has(.xp-lightbox[open]) {
 	.xp-entry--alt .xp-details {
 		grid-column: 2;
 		grid-row: 2;
+	}
+
+	.xp-card {
 		padding: 18px;
 	}
 
