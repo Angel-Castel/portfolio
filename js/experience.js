@@ -71,3 +71,42 @@
   measure();
   update();
 })();
+
+// Recognition images: click opens an enlarged view in a native modal <dialog>
+(function () {
+  const dialog = document.querySelector(".xp-lightbox");
+  const triggers = document.querySelectorAll("#experience .xp-figure-trigger");
+  if (!dialog || !triggers.length || typeof dialog.showModal !== "function") return;
+
+  const img = dialog.querySelector(".xp-lightbox-img");
+  const caption = dialog.querySelector(".xp-lightbox-caption");
+  let lastTrigger = null;
+
+  triggers.forEach(trigger => {
+    trigger.addEventListener("click", () => {
+      const thumb = trigger.querySelector("img");
+      const figcaption = trigger.closest("figure").querySelector("figcaption");
+
+      img.src = trigger.dataset.full || thumb.currentSrc || thumb.src;
+      img.alt = thumb.alt;
+      caption.textContent = figcaption ? figcaption.textContent : "";
+      dialog.setAttribute("aria-label", caption.textContent || "Enlarged image");
+
+      lastTrigger = trigger;
+      dialog.showModal();
+    });
+  });
+
+  dialog.querySelector(".xp-lightbox-close").addEventListener("click", () => dialog.close());
+
+  // Any click outside the image itself (backdrop, empty space, caption) closes the lightbox
+  dialog.addEventListener("click", e => {
+    if (e.target !== img) dialog.close();
+  });
+
+  // Escape is handled natively by <dialog>; return focus to the image that opened it
+  dialog.addEventListener("close", () => {
+    img.removeAttribute("src");
+    if (lastTrigger) lastTrigger.focus();
+  });
+})();

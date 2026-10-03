@@ -1067,17 +1067,48 @@ section h3, section h4{
 	transform: translateY(-50%);
 }
 
+/* Image under the role/company/dates block; hugs the timeline side of the column */
 .xp-figure {
-	margin: 8px 0 0;
+	max-width: 360px;
+	margin: 28px 0 0 auto;
 }
 
-.xp-figure img {
+.xp-entry--alt .xp-figure {
+	margin-left: 0;
+}
+
+/* Recognition images: dimmed at rest, full brightness + glow on hover/focus, click opens the lightbox */
+.xp-figure-trigger {
 	display: block;
 	width: 100%;
-	max-width: 340px;
-	height: auto;
-	border-radius: 10px;
+	padding: 0;
 	border: 1px solid rgba(255, 255, 255, 0.08);
+	border-radius: 10px;
+	background: none;
+	overflow: hidden;
+	cursor: pointer;
+	transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.xp-figure-trigger img {
+	display: block;
+	width: 100%;
+	height: auto;
+	filter: brightness(0.3);
+	transition: filter 0.3s ease;
+}
+
+.xp-figure-trigger:hover,
+.xp-figure-trigger:focus-visible {
+	transform: scale(1.03);
+	border-color: rgba(103, 232, 249, 0.6);
+	box-shadow: 0 0 0 1px rgba(103, 232, 249, 0.25), 0 0 24px 2px rgba(34, 211, 238, 0.35);
+	outline: none;
+}
+
+.xp-figure-trigger:hover img,
+.xp-figure-trigger:focus-visible img {
+	filter: brightness(1);
 }
 
 .xp-figure figcaption {
@@ -1087,14 +1118,119 @@ section h3, section h4{
 	margin-top: 8px;
 }
 
+/* Lightbox (native <dialog>: focus trap, Escape to close and inert page come from showModal) */
+.xp-lightbox {
+	width: 100vw;
+	height: 100vh;
+	max-width: none;
+	max-height: none;
+	margin: 0;
+	padding: 24px;
+	border: none;
+	background: transparent;
+	overflow: hidden;
+}
+
+.xp-lightbox[open] {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	animation: xp-lightbox-in 0.25s ease;
+}
+
+.xp-lightbox::backdrop {
+	background: rgba(4, 8, 16, 0.9);
+	backdrop-filter: blur(4px);
+	-webkit-backdrop-filter: blur(4px);
+}
+
+html:has(.xp-lightbox[open]) {
+	overflow: hidden;
+}
+
+.xp-lightbox-figure {
+	margin: 0;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	max-width: 100%;
+	max-height: 100%;
+}
+
+.xp-lightbox-img {
+	display: block;
+	max-width: min(1028px, calc(100vw - 48px));
+	max-height: calc(100vh - 120px);
+	width: auto;
+	height: auto;
+	object-fit: contain;
+	border-radius: 12px;
+	box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6), 0 0 32px rgba(34, 211, 238, 0.2);
+}
+
+.xp-lightbox-caption {
+	font-family: 'Inter', sans-serif;
+	font-size: 14px;
+	color: #a9b4c2;
+	margin-top: 14px;
+	text-align: center;
+}
+
+.xp-lightbox-close {
+	position: fixed;
+	top: 20px;
+	right: 20px;
+	width: 44px;
+	height: 44px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 0;
+	font-size: 28px;
+	line-height: 1;
+	color: #f7f9fb;
+	background: rgba(15, 23, 42, 0.8);
+	border: 1px solid rgba(255, 255, 255, 0.15);
+	border-radius: 50%;
+	cursor: pointer;
+	transition: background-color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.xp-lightbox-close:hover,
+.xp-lightbox-close:focus-visible {
+	background: rgba(103, 232, 249, 0.15);
+	border-color: rgba(103, 232, 249, 0.6);
+	box-shadow: 0 0 16px rgba(34, 211, 238, 0.35);
+	outline: none;
+}
+
+@keyframes xp-lightbox-in {
+	from {
+		opacity: 0;
+		transform: scale(0.97);
+	}
+	to {
+		opacity: 1;
+		transform: scale(1);
+	}
+}
+
 @media (prefers-reduced-motion: reduce) {
 	.xp-node,
-	.xp-line-head {
+	.xp-line-head,
+	.xp-figure-trigger,
+	.xp-figure-trigger img {
 		transition: none;
 	}
 
-	.xp-node.is-active::after {
+	.xp-node.is-active::after,
+	.xp-lightbox[open] {
 		animation: none;
+	}
+
+	.xp-figure-trigger:hover,
+	.xp-figure-trigger:focus-visible {
+		transform: none;
 	}
 }
 
@@ -1464,6 +1600,10 @@ section h3, section h4{
 		text-align: left;
 		padding: 0;
 		margin-bottom: 16px;
+	}
+
+	.xp-figure {
+		margin: 24px 0 0;
 	}
 
 	.xp-details,
