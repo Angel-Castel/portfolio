@@ -511,13 +511,6 @@ p, li{
 	transform: translateY(-1px);
 }
 
-#portfolio {
-	margin-top: 30px;
-	height: fit-content;
-	border-top: 1px solid gray;
-	border-width: 1px 0px;
-}
-
 div{
 	display: inline;
 }
@@ -902,6 +895,10 @@ section h3, section h4{
 	margin: 28px 0 0 auto;
 }
 
+.xp-figure {
+	scroll-margin-top: 96px;
+}
+
 .xp-entry--alt .xp-figure {
 	margin-left: 0;
 }
@@ -1031,6 +1028,52 @@ html:has(.xp-lightbox[open]) {
 	border-color: rgba(103, 232, 249, 0.6);
 	box-shadow: 0 0 16px rgba(34, 211, 238, 0.35);
 	outline: none;
+}
+
+/* Prev/next for image sets (e.g. a project's screenshots); shown only when the lightbox has a set */
+.xp-lightbox-nav {
+	position: fixed;
+	top: 50%;
+	transform: translateY(-50%);
+	width: 48px;
+	height: 48px;
+	display: none;
+	align-items: center;
+	justify-content: center;
+	padding: 0;
+	font-size: 18px;
+	line-height: 1;
+	color: #f7f9fb;
+	background: rgba(15, 23, 42, 0.8);
+	border: 1px solid rgba(255, 255, 255, 0.15);
+	border-radius: 50%;
+	cursor: pointer;
+	transition: background-color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.xp-lightbox.has-nav .xp-lightbox-nav {
+	display: flex;
+}
+
+.xp-lightbox-prev {
+	left: 20px;
+}
+
+.xp-lightbox-next {
+	right: 20px;
+}
+
+.xp-lightbox-nav:hover,
+.xp-lightbox-nav:focus-visible {
+	background: rgba(103, 232, 249, 0.15);
+	border-color: rgba(103, 232, 249, 0.6);
+	box-shadow: 0 0 16px rgba(34, 211, 238, 0.35);
+	outline: none;
+}
+
+/* Screenshots are wider than the default cap; leave room for the prev/next buttons */
+.xp-lightbox.has-nav .xp-lightbox-img {
+	max-width: calc(100vw - 160px);
 }
 
 @keyframes xp-lightbox-in {
@@ -1715,151 +1758,486 @@ html:has(.xp-lightbox[open]) {
 	}
 }
 
-.project {
-	background: rgba(15, 23, 42, 0.9);
-	border: 1px solid rgba(255, 255, 255, 0.1);
-	border-radius: 8px 8px 0 0;
-	text-align: left;
-	width: 90%;
+/* Portfolio - case-study rows rendered by js/portfolio.js. Reuses .xp-card, .xp-subhead, .xp-list and the
+   Skills keycap (.sk-cap) for tech chips. >=1024px: alternating 60/40 rows; 768-1023px: one column with the
+   thumbnail strip; <768px: the original phone slideshow look (title bar, caption bar, dots). */
+.pf-list {
+	display: flex;
+	flex-direction: column;
+	gap: 72px;
+	max-width: 1406px;
 	margin: 0 auto;
-	padding-top: 12px;
-	padding-bottom: 12px;
-	display: block;
 }
 
-.project h3 {
-	color: #67e8f9;
-	margin: 0;
-	padding-left: 15px;
-	font-family: 'Manrope', sans-serif;
+.pf-row {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr);
+	gap: 24px;
 }
 
-  /* Slideshow container */
-  .slideshow-container {
-	width: 90%;
-	position: relative;
-	text-align: center;
-	margin: 0 auto;
-	object-position: center;
-  }
-
-  .fade img{
-	width: 90%;
-	height: 69%;
-	object-fit: cover;
+.pf-media {
 	display: block;
-	margin: 0 auto;
-	border-top: 0px;
-  }
+	min-width: 0;
+}
 
-  /* Hide the images by default */
-  .fade {
+.pf-mobile-title {
 	display: none;
-  }
+}
 
-  .preview-next {
-	width: 98%;
+/* Browser-window frame around the main screenshot */
+.pf-browser {
 	display: block;
-	margin: 0 auto;
-  }
+	padding: 0;
+	overflow: hidden;
+	transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
 
-  /* Next & previous buttons */
-  .prev, .next {
-	cursor: pointer;
-	width: auto;
-	margin-top: -28%;
-	margin-bottom: 26%;
-	padding: 16px;
-	color: #f1f5f9;
-	font-weight: bold;
-	font-size: 18px;
-	transition: 0.6s ease;
-	border-radius: 0 3px 3px 0;
-	user-select: none;
-  }
+.pf-browser:hover {
+	transform: translateY(-4px);
+	border-color: rgba(255, 255, 255, 0.16);
+}
 
-  .prev {
-	float: left;
-  }
+.pf-browser-bar {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	height: 36px;
+	padding: 0 14px;
+	background: rgba(255, 255, 255, 0.02);
+	border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
 
-  /* Position the "next button" to the right */
-  .next {
-	float: right;
-	margin-left: 80%;
-	border-radius: 3px 0 0 3px;
-  }
-
-  /* On hover, add a black background color with a little bit see-through */
-  .prev:hover, .next:hover {
-	color: rgb(255, 255, 255);
-	background-color: rgba(0,0,0,0.8);
-  }
-
-  .image-description {
-	width: 90%;
-	height: fit-content;
-	margin: 0 auto;
-	display: inline-block;
-	background: #000;
-  }
-
-  /* Caption text */
-  .image-title {
-	color: #eee;
-	font-size: 15px;
-	width: 79%;
-	margin-left: 1%;
-	padding: 10px 0;
-	text-align: left;
-	display: inline-block;
-  }
-
-  /* Number text (1/3 etc) */
-  .image-number {
-	color: #eee;
-	font-size: 12px;
-	padding: 10px 0;
-	width: 17%;
-	text-align: center;
-	display: inline-block;
-  }
-
-  .dot-container{
-	width: fit-content;
-	height: 0px;
-	margin: 0 auto;
-	margin-bottom: 100px;
-	display: block;
-  }
-
-  /* The dots/bullets/indicators */
-  .dot {
-	cursor: pointer;
-	height: 15px;
-	width: 15px;
-	margin: 0 2px;
-	position: relative;
-	top: -15px;
-	background-color: #bbb;
+.pf-dot-btn {
+	flex: none;
+	width: 10px;
+	height: 10px;
 	border-radius: 50%;
+	background: rgba(255, 255, 255, 0.14);
+}
+
+.pf-url {
+	flex: 0 1 60%;
+	margin: 0 auto;
+	height: 20px;
+	padding: 0 12px;
+	border-radius: 9999px;
+	background: rgba(255, 255, 255, 0.05);
+	font-family: 'Inter', sans-serif;
+	font-size: 11px;
+	line-height: 20px;
+	color: #7c8aa0;
+	text-align: center;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+/* Slides are stacked and cross-fade; the viewport's aspect ratio comes from the first screenshot */
+.pf-viewport {
+	position: relative;
+	display: block;
+	background: #0b1422;
+	outline: none;
+	touch-action: pan-y;
+}
+
+.pf-viewport:focus-visible {
+	box-shadow: inset 0 0 0 2px #5eead4;
+}
+
+.pf-slide {
+	position: absolute;
+	inset: 0;
+	display: block;
+	padding: 0;
+	border: 0;
+	background: none;
+	cursor: zoom-in;
+	opacity: 0;
+	visibility: hidden;
+	transition: opacity 0.3s ease, visibility 0s linear 0.3s;
+}
+
+.pf-slide.is-active {
+	opacity: 1;
+	visibility: visible;
+	transition: opacity 0.3s ease;
+}
+
+.pf-slide img {
+	display: block;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	object-position: top;
+}
+
+.pf-slide:focus-visible {
+	outline: 2px solid #5eead4;
+	outline-offset: -2px;
+}
+
+.pf-arrow {
+	position: absolute;
+	top: 50%;
+	z-index: 2;
+	transform: translateY(-50%);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 40px;
+	height: 40px;
+	padding: 0;
+	font-size: 16px;
+	line-height: 1;
+	color: #f7f9fb;
+	background: rgba(5, 10, 18, 0.7);
+	border: 1px solid rgba(255, 255, 255, 0.15);
+	border-radius: 50%;
+	cursor: pointer;
+	transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.pf-prev {
+	left: 12px;
+}
+
+.pf-next {
+	right: 12px;
+}
+
+.pf-arrow:hover,
+.pf-arrow:focus-visible {
+	background: rgba(94, 234, 212, 0.15);
+	border-color: rgba(94, 234, 212, 0.6);
+	outline: none;
+}
+
+.xp-section .pf-caption {
+	display: flex;
+	justify-content: space-between;
+	gap: 16px;
+	margin: 12px 4px 0;
+	padding: 0;
+	font-family: 'Inter', sans-serif;
+	font-size: 13px;
+	line-height: 1.5;
+	color: #7c8aa0;
+	text-align: left;
+}
+
+.pf-counter {
+	flex: none;
+}
+
+/* Thumbnail strip: scrolls horizontally when it does not fit */
+.pf-thumbs {
+	display: flex;
+	gap: 10px;
+	overflow-x: auto;
+	padding: 12px 2px 6px;
+	scrollbar-width: thin;
+	scrollbar-color: rgba(255, 255, 255, 0.15) transparent;
+}
+
+.pf-thumb {
+	flex: 0 0 96px;
+	padding: 0;
+	border: 2px solid transparent;
+	border-radius: 8px;
+	overflow: hidden;
+	background: none;
+	cursor: pointer;
+	opacity: 0.55;
+	transition: opacity 0.2s ease, border-color 0.2s ease;
+}
+
+.pf-thumb img {
+	display: block;
+	width: 100%;
+	height: 56px;
+	object-fit: cover;
+	object-position: top;
+}
+
+.pf-thumb:hover {
+	opacity: 0.85;
+}
+
+.pf-thumb.is-active {
+	opacity: 1;
+	border-color: #5eead4;
+}
+
+.pf-thumb:focus-visible {
+	outline: 2px solid #5eead4;
+	outline-offset: 2px;
+}
+
+.pf-dots {
+	display: none;
+}
+
+/* Text panel */
+.pf-panel {
+	display: block;
+}
+
+.xp-section .pf-title {
+	font-family: 'Manrope', sans-serif;
+	font-size: 26px;
+	font-weight: 700;
+	line-height: 1.25;
+	color: #f7f9fb;
+	margin: 0 0 12px;
+	padding: 0;
+}
+
+.xp-section .pf-desc,
+.xp-section .pf-role {
+	font-family: 'Inter', sans-serif;
+	font-size: 15px;
+	line-height: 1.65;
+	color: #a9b4c2;
+	margin: 0;
+	padding: 0;
+	text-align: left;
+}
+
+.xp-section .pf-label {
+	margin: 22px 0 8px;
+}
+
+.pf-tech {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+	list-style: none;
+	margin: 16px 0 0;
+	padding: 0;
+}
+
+.pf-tech .pf-chip {
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	padding: 4px 12px 4px 4px;
+	font-family: 'Inter', sans-serif;
+	font-size: 13px;
+	font-weight: 500;
+	line-height: 1;
+	color: #a9b4c2;
+	background: rgba(255, 255, 255, 0.03);
+	border: 1px solid rgba(255, 255, 255, 0.12);
+	border-radius: 9999px;
+}
+
+/* Small version of the Skills keycap, for tech chips */
+.sk-cap--mini {
+	width: 24px;
+	max-width: 24px;
+	border-radius: 7px;
+	box-shadow:
+		inset 0 1px 0 rgba(255, 255, 255, 0.35),
+		inset 0 -2px 0 rgba(0, 0, 0, 0.22),
+		0 2px 0 color-mix(in srgb, var(--key) 50%, #000);
+	transition: none;
+}
+
+.sk-cap--mini::before {
+	inset: 2px 3px 50% 3px;
+	border-radius: 5px 5px 8px 8px;
+}
+
+.sk-cap--mini i {
+	font-size: 13px;
+}
+
+.sk-cap--mini .sk-legend {
+	font-size: 10px;
+}
+
+.pf-crosslink {
 	display: inline-block;
-	transition: background-color 0.6s ease;
-  }
+	margin-top: 18px;
+	font-family: 'Inter', sans-serif;
+	font-size: 14px;
+	font-weight: 600;
+	color: #5eead4;
+	text-decoration: none;
+}
 
-  .active-dot, .dot:hover {
-	background-color: #717171;
-  }
+.pf-crosslink:hover,
+.pf-crosslink:focus-visible {
+	color: #99f6e4;
+	text-decoration: underline;
+}
 
-  /* Fading animation */
-  .fade {
-	animation-name: fade;
-	animation-duration: 1.5s;
-  }
+/* Laptops and up: alternating 60 / 40 case-study rows */
+@media only screen and (min-width: 1024px) {
+	.pf-list {
+		gap: 120px;
+	}
 
-  @keyframes fade {
-	from {opacity: .4}
-	to {opacity: 1}
-  }
+	.pf-row {
+		grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+		gap: 48px;
+		align-items: center;
+	}
+
+	.pf-row--flip {
+		grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+	}
+
+	.pf-row--flip .pf-media {
+		order: 2;
+	}
+
+	/* Entrance: each row slides in from its media side, once (classes set by JS) */
+	.pf-section.is-armed .pf-row:not(.is-revealed) {
+		opacity: 0;
+	}
+
+	.pf-row.is-revealed {
+		animation: pf-in-left 0.8s cubic-bezier(0.2, 0.7, 0.3, 1) both;
+	}
+
+	.pf-row--flip.is-revealed {
+		animation-name: pf-in-right;
+	}
+}
+
+@keyframes pf-in-left {
+	from {
+		opacity: 0;
+		transform: translateX(-48px);
+	}
+	to {
+		opacity: 1;
+		transform: none;
+	}
+}
+
+@keyframes pf-in-right {
+	from {
+		opacity: 0;
+		transform: translateX(48px);
+	}
+	to {
+		opacity: 1;
+		transform: none;
+	}
+}
+
+/* Phones: the original slideshow look (title bar, screenshot, black caption bar, edge arrows, dots) */
+@media only screen and (max-width: 767px) {
+	.pf-list {
+		gap: 56px;
+	}
+
+	.pf-mobile-title {
+		display: block;
+		padding: 12px 15px;
+		background: rgba(15, 23, 42, 0.9);
+		border: 1px solid rgba(255, 255, 255, 0.1);
+		border-bottom: 0;
+		border-radius: 8px 8px 0 0;
+		font-family: 'Manrope', sans-serif;
+		font-size: 16px;
+		font-weight: 600;
+		line-height: 1.4;
+		color: #67e8f9;
+	}
+
+	.pf-browser,
+	.pf-browser:hover {
+		background: transparent;
+		border: 0;
+		border-radius: 0;
+		box-shadow: none;
+		transform: none;
+	}
+
+	.pf-browser-bar,
+	.pf-thumbs {
+		display: none;
+	}
+
+	.pf-arrow,
+	.pf-arrow:hover,
+	.pf-arrow:focus-visible {
+		width: auto;
+		height: auto;
+		padding: 16px 6px;
+		font-size: 18px;
+		font-weight: bold;
+		background: transparent;
+		border: 0;
+		border-radius: 3px;
+		text-shadow: 0 1px 4px rgba(0, 0, 0, 0.9);
+	}
+
+	.pf-prev {
+		left: 0;
+	}
+
+	.pf-next {
+		right: 0;
+	}
+
+	.xp-section .pf-caption {
+		align-items: center;
+		margin: 0;
+		padding: 10px 12px;
+		background: #000;
+		font-family: serif;
+		font-size: 15px;
+		color: #eee;
+	}
+
+	.pf-counter {
+		font-size: 12px;
+	}
+
+	.pf-dots {
+		display: flex;
+		justify-content: center;
+		gap: 6px;
+		margin-top: 14px;
+	}
+
+	.pf-dot {
+		width: 10px;
+		height: 10px;
+		padding: 0;
+		border: 0;
+		border-radius: 50%;
+		background: #bbb;
+		cursor: pointer;
+		transition: background-color 0.6s ease;
+	}
+
+	.pf-dot.is-active,
+	.pf-dot:hover {
+		background: #717171;
+	}
+
+	.xp-section .pf-title {
+		font-size: 21px;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.pf-slide,
+	.pf-slide.is-active,
+	.pf-browser {
+		transition: none;
+	}
+
+	.pf-browser:hover {
+		transform: none;
+	}
+}
 
 @media only screen and (max-width: 990px){
 	header{
@@ -2027,10 +2405,6 @@ html:has(.xp-lightbox[open]) {
 	}
 
 
-	#portfolio{
-		min-width: 96.5vw;
-	}
-
 	/* Experience: single column, line on the left edge */
 	.xp-section {
 		padding: 80px 0 100px;
@@ -2154,27 +2528,6 @@ html:has(.xp-lightbox[open]) {
 		font-size: 20px;
 	}
 
-	.dot-container{
-		margin-bottom: 70px;
-	}
-
-	.prev, .next {
-		position: relative;
-		z-index: 2;
-	}
-
-	/* Allow vertical page scroll while horizontal swipes change the slide */
-	.slideshow-container {
-		touch-action: pan-y;
-	}
-
-	.dot {
-		position: relative;
-		top: 10px;
-		height: 10px;
-  		width: 10px;
-	}
-
 	h1, h2, h3, p{
 		padding-left: 3.75%;
 	}
@@ -2278,17 +2631,4 @@ html:has(.xp-lightbox[open]) {
 		font-size: 8vh;
 	}
 
-	.preview-next {
-		width: 99vw;
-	}
-
-	.prev {
-		padding-left: 2px;
-		margin-top: -38%;
-	}
-	
-	.next{
-		padding-right: 5px;
-		margin-top: -38%;
-	}
 }
