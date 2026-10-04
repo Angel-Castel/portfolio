@@ -224,11 +224,6 @@ main{
 	text-decoration: none;
 }
 
-.frame-languages {
-	margin-bottom: 20px;
-  	display: inline-block;
-}
-
 h1, h2, h3, p, li{
 	padding-left: 5%;
 	font-family: 'Inter', sans-serif;
@@ -274,17 +269,6 @@ p, li{
 	position: absolute;
 }
 
-#skills>div{
-	position: relative;
-	margin-left: 5%;
-}
-
-.icon-img{
-	display: inline-block;
-	text-align: center;
-	width: 105px;
-}
-
 .fab,.fas,.fa-brands{
 	position: relative;
 	margin-right: 70px;
@@ -294,61 +278,12 @@ p, li{
 	display: inline-block;
 }
 
-.fab>p,.fas>p,.fa-brands>p{
-	font-size: 15px;
-	width: 90px;
-	padding-left: 0%;
-	text-align: center;
-	color: #cbd5e1;
-}
-
-.long-frame-p{
-	width: max-content;
-}
-
-.frame-p {
-	color: #cbd5e1;
-}
-
-.fas>p{
-	color: #cbd5e1;
-}
-
-
-#skills>div>.fab,
-#skills>div>.fas,
-#skills>div>.fa-brands{
-	margin-right: 0px;
-	color: #cbd5e1;
-}
-
 .fa-github{
 	color: #f1f5f9 !important;
 }
 
 .fa-linkedin{
 	color: #38bdf8 !important;
-}
-
-.fa-angular{
-	color: rgb(244, 63, 94) !important;
-}
-
-.fa-react{
-	color: rgb(56, 189, 248) !important;
-}
-
-.fa-node{
-	color: rgb(74, 222, 128) !important;
-}
-
-.icon-img img{
-	height: 46px;
-  	width: 46px;
-}
-
-#skills>h2{
-	margin-bottom: 20px;
 }
 
 .box{
@@ -587,16 +522,6 @@ p, li{
 	border-width: 1px 0px;
 }
 
-#skills {
-	height: 100vh !important;
-	margin-top: 30px;
-	height: fit-content;
-	border-top: 1px solid gray;
-	border-bottom: 1px solid gray;
-	border-width: 1px 0px;
-	margin-bottom: 30px;
-}
-
 .row{
 	font-family: Garamond , sans-serif;
 	display: inline-block;
@@ -753,20 +678,6 @@ section h3, section h4{
 	display: none;
 }
 
-#skills ul{
-	padding-left: 7%;
-}
-
-#skills ul li p{
-	padding-left: 0;
-	color: #cbd5e1;
-}
-
-#skills ul ul{
-	padding-left: 3%;
-	margin-bottom: 40px;
-}
-
 /* Experience - scroll-driven timeline */
 .xp-section {
 	--xp-amber: #f2a54a;
@@ -817,7 +728,7 @@ section h3, section h4{
 .xp-heading {
 	display: block;
 	text-align: center;
-	margin-bottom: 72px;
+	margin-bottom: 30px;
 }
 
 .xp-section .xp-eyebrow {
@@ -913,10 +824,16 @@ section h3, section h4{
 .xp-details {
 	grid-column: 3;
 	grid-row: 1;
+}
+
+/* Shared card container: Experience details, Skills groups and Knowledge */
+.xp-card {
+	display: block;
 	background: rgba(10, 18, 32, 0.6);
 	border: 1px solid rgba(255, 255, 255, 0.06);
 	border-radius: 14px;
 	padding: 24px 28px;
+	box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
 }
 
 .xp-entry--alt .xp-meta {
@@ -1286,6 +1203,400 @@ html:has(.xp-lightbox[open]) {
 	}
 }
 
+/* Skills - keycaps fly from a 3D keyboard (right) into grouped grids (left); see js/skills.js */
+/* Two columns, each under half the width: keys card on the left; Knowledge above the keyboard on the right */
+.sk-layout {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+	grid-template-rows: auto auto;
+	grid-template-areas:
+		"groups stage"
+		".      knowledge";
+	gap: 24px 32px;
+	align-items: start;
+	/* Caps the cards at ~687px per column on very wide screens */
+	max-width: 1406px;
+	margin: 0 auto;
+}
+
+/* The column is a size container, so key glyphs and names scale with the space available */
+.sk-groups {
+	grid-area: groups;
+	container-type: inline-size;
+	display: flex;
+	flex-direction: column;
+	gap: 24px;
+	text-align: right;
+	position: relative;
+	z-index: 1;
+}
+
+.sk-group {
+	transition: opacity 0.5s ease;
+}
+
+/* Group labels use the shared .xp-subhead style */
+.xp-section .sk-group-title {
+	margin-bottom: 18px;
+}
+
+/* Key rows, aligned to the right edge of each card; the 8 secondary skills fit on one row.
+   Key spacing is controlled here:
+   --sk-key-size = width of each key (the keycap is at most 64px)
+   --sk-key-gap  = horizontal space between keys
+   Keys shrink below --sk-key-size when the card is too narrow. */
+.sk-keys {
+	--sk-key-size: 64px;
+	--sk-key-gap: 13px;
+	display: flex;
+	justify-content: flex-end;
+	gap: 16px var(--sk-key-gap);
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+/* Keycap with its name underneath; wider than the cap so longer names fit.
+   --cap-top (top padding) keeps the trail, landing ring and flight pivot centered on the cap. */
+.sk-key {
+	--cap-top: 10px;
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	flex: 0 1 auto;
+	width: var(--sk-key-size);
+	min-width: 0;
+	padding: 10px 0 8px;
+	transform-origin: 50% calc(var(--cap-top) + 32px);
+}
+
+/* Glossy keycap: brand-colored face, darker skirt underneath, soft drop shadow */
+.sk-cap {
+	position: relative;
+	z-index: 1;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	max-width: 64px;
+	aspect-ratio: 1;
+	border-radius: 14px;
+	color: var(--glyph);
+	background: linear-gradient(155deg, color-mix(in srgb, var(--key) 65%, #fff) 0%, var(--key) 42%, color-mix(in srgb, var(--key) 70%, #000) 100%);
+	box-shadow:
+		inset 0 2px 0 rgba(255, 255, 255, 0.35),
+		inset 0 -5px 0 rgba(0, 0, 0, 0.22),
+		0 5px 0 color-mix(in srgb, var(--key) 50%, #000),
+		0 10px 18px rgba(0, 0, 0, 0.5);
+	transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.sk-cap::before {
+	content: "";
+	position: absolute;
+	inset: 4px 6px 50% 6px;
+	border-radius: 10px 10px 18px 18px;
+	background: linear-gradient(to bottom, rgba(255, 255, 255, 0.35), rgba(255, 255, 255, 0));
+	pointer-events: none;
+}
+
+.sk-cap i {
+	position: relative;
+	margin: 0;
+	font-size: clamp(22px, 4.5cqi, 28px);
+	color: inherit;
+	text-shadow: 0 1px 0 rgba(0, 0, 0, 0.25);
+}
+
+.sk-legend {
+	position: relative;
+	font-family: 'Manrope', sans-serif;
+	font-size: clamp(14px, 3.2cqi, 20px);
+	font-weight: 800;
+	letter-spacing: 0.5px;
+	text-shadow: 0 1px 0 rgba(0, 0, 0, 0.25);
+}
+
+/* Name label, shown under the key on hover */
+.sk-name {
+	margin-top: 12px;
+	font-family: 'Inter', sans-serif;
+	font-size: clamp(9px, 1.95cqi, 12px);
+	font-weight: 500;
+	line-height: 1.3;
+	text-align: center;
+	color: #a9b4c2;
+	transition: color 0.2s ease, opacity 0.3s ease;
+}
+
+.sk-key:hover {
+	z-index: 5;
+}
+
+.sk-key:hover .sk-cap {
+	transform: translateY(-4px) scale(1.1);
+	box-shadow:
+		inset 0 2px 0 rgba(255, 255, 255, 0.35),
+		inset 0 -5px 0 rgba(0, 0, 0, 0.22),
+		0 5px 0 color-mix(in srgb, var(--key) 50%, #000),
+		0 0 0 2px var(--ring, var(--key)),
+		0 0 26px 4px color-mix(in srgb, var(--ring, var(--key)) 70%, transparent),
+		0 14px 24px rgba(0, 0, 0, 0.55);
+}
+
+.sk-key:hover .sk-name {
+	color: #f7f9fb;
+}
+
+/* Names stay hidden while the keys fly and fade in as each one lands */
+.sk-section.is-flying .sk-key:not(.is-landed) .sk-name {
+	opacity: 0;
+}
+
+/* Comet tail behind a flying key, pointing back toward where it came from */
+.sk-trail {
+	position: absolute;
+	top: calc(var(--cap-top) + 32px);
+	left: 50%;
+	z-index: 0;
+	width: 150px;
+	height: 16px;
+	margin-top: -8px;
+	border-radius: 9999px;
+	background: linear-gradient(to right, color-mix(in srgb, var(--ring, var(--key)) 80%, #fff) 0%, color-mix(in srgb, var(--ring, var(--key)) 55%, transparent) 35%, transparent 100%);
+	clip-path: polygon(0 0, 100% 45%, 100% 55%, 0 100%);
+	filter: blur(3px);
+	transform-origin: 0 50%;
+	transform: rotate(var(--trail-angle, 0rad));
+	opacity: 0;
+	pointer-events: none;
+}
+
+/* Landing: squash-and-settle with a flash, plus a ring puffing outward */
+.sk-key::after {
+	content: "";
+	position: absolute;
+	top: calc(var(--cap-top) - 7px);
+	left: calc(50% - 38px);
+	width: 76px;
+	height: 76px;
+	border-radius: 18px;
+	border: 2px solid var(--ring, var(--key));
+	opacity: 0;
+	pointer-events: none;
+}
+
+.sk-key.is-landed .sk-cap {
+	animation: sk-settle 0.45s cubic-bezier(0.3, 1.6, 0.5, 1) 1;
+}
+
+.sk-key.is-landed::after {
+	animation: sk-puff 0.6s ease-out 1;
+}
+
+@keyframes sk-settle {
+	0% {
+		transform: scale(1.15, 0.85);
+		filter: brightness(1.6);
+	}
+	45% {
+		transform: scale(0.94, 1.06);
+	}
+	100% {
+		transform: scale(1);
+		filter: brightness(1);
+	}
+}
+
+@keyframes sk-puff {
+	0% {
+		opacity: 0.9;
+		transform: scale(0.85);
+		box-shadow: 0 0 18px var(--ring, var(--key));
+	}
+	100% {
+		opacity: 0;
+		transform: scale(1.5);
+		box-shadow: 0 0 0 transparent;
+	}
+}
+
+/* Hidden until the reveal plays (class added by JS, so the grid shows without JS) */
+.sk-section.is-armed .sk-key {
+	opacity: 0;
+	transform: translateY(18px) scale(0.9);
+}
+
+/* The group cards and Knowledge wait until the keyboard has reached the right */
+.sk-section.is-armed .sk-group,
+.sk-section.is-armed .sk-knowledge {
+	opacity: 0;
+}
+
+/* Small screens: keys simply fade and settle into place, staggered */
+.sk-section.is-fading .sk-key {
+	transition: opacity 0.5s ease, transform 0.55s cubic-bezier(0.3, 1.4, 0.5, 1);
+	transition-delay: calc(var(--i, 0) * 45ms);
+}
+
+/* The keyboard: isometric plate of sockets holding copies of the keycaps */
+.sk-stage {
+	grid-area: stage;
+	align-self: center;
+	position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	min-height: 420px;
+	perspective: 1600px;
+	/* Resting spot: right column, at the intro's size and height (--intro-y is set by JS) */
+	transform: translate(0px, var(--intro-y, 0px)) scale(1.45);
+	transition: transform 1.6s cubic-bezier(0.45, 0.05, 0.25, 1);
+}
+
+/* Intro: keyboard starts in the middle of the section (--intro-x is set by JS) */
+.sk-stage.is-intro {
+	transform: translate(var(--intro-x, 0px), var(--intro-y, 0px)) scale(1.45);
+}
+
+.sk-board {
+	--cap: 56px;
+	display: grid;
+	grid-template-columns: repeat(5, var(--cap));
+	gap: 12px;
+	padding: 22px;
+	border-radius: 22px;
+	background: linear-gradient(160deg, #1c2638, #0b111c);
+	box-shadow:
+		0 0 0 1px rgba(255, 255, 255, 0.06),
+		inset 0 1px 0 rgba(255, 255, 255, 0.08),
+		0 40px 70px rgba(0, 0, 0, 0.65),
+		0 0 60px rgba(103, 232, 249, 0.08);
+	transform-style: preserve-3d;
+	transform: rotateY(0deg) rotateX(52deg) rotateZ(-38deg);
+	transition: transform 1.6s cubic-bezier(0.45, 0.05, 0.25, 1);
+}
+
+/* Same function list in every state, so -398deg -> -38deg animates as one full clockwise turn */
+.sk-board.is-open {
+	transform: rotateY(28deg) rotateX(52deg) rotateZ(-38deg);
+}
+
+.sk-stage.is-intro .sk-board {
+	transform: rotateY(0deg) rotateX(52deg) rotateZ(-398deg);
+}
+
+/* Docked: once Knowledge scrolls into view, the keyboard turns a full circle to the left into the
+   space beside it (below the cards), smaller, with its keys lit again. --dock-* are set by JS. */
+.sk-stage.is-docked {
+	transform: translate(var(--dock-x, 0px), var(--dock-y, 0px)) scale(var(--dock-scale, 1.15));
+}
+
+.sk-stage.is-docked .sk-board {
+	transform: rotateY(28deg) rotateX(52deg) rotateZ(-398deg);
+}
+
+/* Once the keys have flown, the keyboard's keys fade between dark and lit as it docks and returns */
+.sk-board.is-settled .sk-cap {
+	transition: filter 0.8s ease 0.5s;
+}
+
+.sk-socket {
+	position: relative;
+	display: block;
+	width: var(--cap);
+	height: var(--cap);
+	border-radius: 12px;
+	background: #070b12;
+	box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.8), inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+	transform-style: preserve-3d;
+}
+
+.sk-board .sk-cap {
+	width: var(--cap);
+	height: var(--cap);
+	border-radius: 12px;
+	transform: translateZ(10px);
+}
+
+.sk-board .sk-cap i {
+	font-size: 24px;
+}
+
+.sk-board .sk-legend {
+	font-size: 17px;
+}
+
+.sk-board.is-spent .sk-cap,
+.sk-board .sk-cap.is-spent {
+	filter: brightness(0.35) saturate(0.7);
+}
+
+/* Sits in front of the big keyboard where they overlap */
+/* Below the Secondary programming skills card, on the right; in front of the big keyboard */
+.sk-knowledge {
+	grid-area: knowledge;
+	position: relative;
+	z-index: 1;
+	justify-self: end;
+	width: fit-content;
+	max-width: 100%;
+	transition: opacity 0.5s ease;
+	margin: 50px 0 50px 0;
+}
+
+@media only screen and (max-width: 990px) {
+	.sk-layout {
+		grid-template-columns: 1fr;
+		grid-template-rows: auto;
+		grid-template-areas:
+			"groups"
+			"knowledge";
+	}
+
+	.sk-stage {
+		display: none;
+	}
+}
+
+/* Phones: four keys per row, card content centered */
+@media only screen and (max-width: 700px) {
+	.sk-groups {
+		text-align: center;
+	}
+
+	.sk-keys {
+		--sk-key-gap: 14px;
+		flex-wrap: wrap;
+		justify-content: center;
+		row-gap: 14px;
+	}
+
+	.sk-key {
+		flex-shrink: 0;
+	}
+
+	.sk-name {
+		font-size: 11px;
+	}
+
+	.sk-cap i {
+		font-size: 28px;
+	}
+
+	.sk-legend {
+		font-size: 20px;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.sk-cap,
+	.sk-name {
+		transition: none;
+	}
+}
+
 .project {
 	background: rgba(15, 23, 42, 0.9);
 	border: 1px solid rgba(255, 255, 255, 0.1);
@@ -1431,13 +1742,6 @@ html:has(.xp-lightbox[open]) {
 	from {opacity: .4}
 	to {opacity: 1}
   }
-
-@media only screen and (max-height: 890px){
-	#skills {
-		height: fit-content !important;
-		padding-bottom: 50px;
-	}
-}
 
 @media only screen and (max-width: 990px){
 	header{
@@ -1697,6 +2001,9 @@ html:has(.xp-lightbox[open]) {
 	.xp-entry--alt .xp-details {
 		grid-column: 2;
 		grid-row: 2;
+	}
+
+	.xp-card {
 		padding: 18px;
 	}
 
@@ -1886,25 +2193,6 @@ html:has(.xp-lightbox[open]) {
 	.next{
 		padding-right: 5px;
 		margin-top: -38%;
-	}
-
-	.frame-languages {
-		width: 90vw;
-	}
-
-	.fa-brands{
-		font-size: 36px;
-		width: 81px;
-	}
-
-	.icon-img{
-		width: fit-content;
-    	margin-right: 21px;
-	}
-
-	.icon-img img{
-		height: 36px;
-		width: 36px;
 	}
 
 	#section5 .row{
