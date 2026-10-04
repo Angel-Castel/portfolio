@@ -1,5 +1,7 @@
-// Skills: on first view, the keyboard spins from the middle of the section to the right while shrinking, then
+// Skills: on first view, the keyboard spins from the middle of the section to the right, then
 // its keycaps fly like meteorites into the grouped grid, leaving darkened copies behind on the keyboard.
+// When the Knowledge card scrolls into view, the keyboard turns left into the space beside it and lights up;
+// scrolling back up to the Main programming languages card returns it to the right.
 // Plays on every page load, once per load (scrolling back shows the settled grid); simplified on small screens
 // or with reduced motion.
 (function () {
@@ -41,9 +43,122 @@
 
   keys.forEach((key, i) => key.style.setProperty("--i", i));
 
+  // Offsets from the keyboard's grid spot (right column) to the middle of the skill cards.
+  // The keyboard always keeps the vertical offset; the intro adds the horizontal one.
+  // Layout offsets ignore transforms, so this stays correct while a transform is applied.
+  const groups = section.querySelector(".sk-groups");
+  function placeStage() {
+    const dx = (layout.offsetLeft + layout.offsetWidth / 2) - (stage.offsetLeft + stage.offsetWidth / 2);
+    const dy = (groups.offsetTop + groups.offsetHeight / 2) - (stage.offsetTop + stage.offsetHeight / 2);
+    stage.style.setProperty("--intro-x", `${dx}px`);
+    stage.style.setProperty("--intro-y", `${dy}px`);
+  }
+
+  // Docking: after the keys have flown and Knowledge is in view, the keyboard moves beside Knowledge,
+  // centered on its height but never overlapping the cards above (it drops lower if needed),
+  // and shrinks if that's the only way to fit before the bottom of the section.
+  const knowledge = section.querySelector(".sk-knowledge");
+  const REST_SCALE = 1.45;
+  const DOCK_SCALE = 1.15;
+  const DOCK_GAP = 24;
+  const middleCard = section.querySelectorAll(".sk-group")[1];
+  let restBoardHeight = null;
+  const HEADER = 65; // fixed header covering the top of the viewport
+  let keysDone = false;
+  let docked = false;
+
+  function placeDock() {
+    if (restBoardHeight === null) return;
+    // All positions in the coordinates of the cards' container (layout offsets, unaffected by transforms)
+    const inner = groups.offsetParent;
+    const top = groups.offsetTop + groups.offsetHeight + DOCK_GAP;
+    const bottom = section.getBoundingClientRect().bottom - inner.getBoundingClientRect().top - DOCK_GAP;
+    const scale = Math.min(DOCK_SCALE, REST_SCALE * (bottom - top) / restBoardHeight);
+    const halfHeight = restBoardHeight * scale / REST_SCALE / 2;
+    const targetX = groups.offsetLeft + groups.offsetWidth / 2;
+    const targetY = Math.min(
+      Math.max(knowledge.offsetTop + knowledge.offsetHeight / 2, top + halfHeight),
+      bottom - halfHeight
+    );
+    stage.style.setProperty("--dock-x", `${targetX - (stage.offsetLeft + stage.offsetWidth / 2)}px`);
+    stage.style.setProperty("--dock-y", `${targetY - (stage.offsetTop + stage.offsetHeight / 2)}px`);
+    stage.style.setProperty("--dock-scale", scale);
+  }
+
+  function dock() {
+    if (docked || !keysDone || !stage.offsetWidth) return; // keyboard hidden on small screens
+    // Measured once, while the keyboard is still at rest on the right
+    if (restBoardHeight === null) restBoardHeight = board.getBoundingClientRect().height;
+    placeDock();
+    docked = true;
+    stage.classList.add("is-docked");
+    board.classList.remove("is-spent");
+    board.querySelectorAll(".sk-cap.is-spent").forEach(cap => cap.classList.remove("is-spent"));
+  }
+
+  // Back to the right side, turning the other way, with its keys darkened again
+  function undock() {
+    if (!docked) return;
+    docked = false;
+    stage.classList.remove("is-docked");
+    board.classList.add("is-spent");
+  }
+
+  // At least 15% of the Knowledge card is on screen
+  function knowledgeShowing() {
+    const rect = knowledge.getBoundingClientRect();
+    return rect.top < window.innerHeight - rect.height * 0.15 && rect.bottom > HEADER;
+  }
+
+  function keysFinished() {
+    keysDone = true;
+    // From here on, keycap brightness changes fade instead of switching instantly
+    board.classList.add("is-settled");
+    if (knowledgeShowing()) dock();
+  }
+
+  // Lower edge of the middle card (Main programming languages) is on screen, below the header
+  function middleCardEdgeShowing() {
+    const bottom = middleCard.getBoundingClientRect().bottom;
+    return bottom > HEADER && bottom <= window.innerHeight;
+  }
+
+  // Scrolling down to Knowledge docks the keyboard; scrolling up while the lower edge of the middle card
+  // is showing returns it right away. Checked at most once per frame.
+  let lastScrollY = window.scrollY;
+  let scrollTicking = false;
+
+  function checkDock() {
+    scrollTicking = false;
+    const y = window.scrollY;
+    const goingDown = y > lastScrollY;
+    const goingUp = y < lastScrollY;
+    lastScrollY = y;
+    if (!keysDone) return;
+
+    if (!docked && goingDown && knowledgeShowing()) {
+      dock();
+    } else if (docked && goingUp && middleCardEdgeShowing()) {
+      undock();
+    }
+  }
+
+  window.addEventListener("scroll", () => {
+    if (scrollTicking) return;
+    scrollTicking = true;
+    requestAnimationFrame(checkDock);
+  }, { passive: true });
+
+  placeStage();
+  window.addEventListener("resize", () => {
+    placeStage();
+    placeDock();
+  });
+
   function showFinal() {
     section.classList.remove("is-armed");
     board.classList.add("is-open", "is-spent");
+    keysFinished();
   }
 
   if (reducedMotion.matches || !("IntersectionObserver" in window) || !Element.prototype.animate) {
@@ -53,25 +168,12 @@
 
   section.classList.add("is-armed");
 
-  // Offset from the keyboard's resting spot (right column) to the middle of the section.
-  // Layout offsets ignore transforms, so this stays correct while the intro transform is applied.
-  function placeIntro() {
-    const dx = (layout.offsetLeft + layout.offsetWidth / 2) - (stage.offsetLeft + stage.offsetWidth / 2);
-    const dy = (layout.offsetTop + layout.offsetHeight / 2) - (stage.offsetTop + stage.offsetHeight / 2);
-    stage.style.setProperty("--intro-x", `${dx}px`);
-    stage.style.setProperty("--intro-y", `${dy}px`);
-  }
-
   if (desktop.matches) {
     // Jump straight into the intro state (no transition), so a reload at Skills doesn't show it sliding in
-    placeIntro();
     stage.style.transition = board.style.transition = "none";
     stage.classList.add("is-intro");
     void stage.offsetWidth;
     stage.style.transition = board.style.transition = "";
-    window.addEventListener("resize", () => {
-      if (stage.classList.contains("is-intro")) placeIntro();
-    });
   }
 
   const observer = new IntersectionObserver(entries => {
@@ -79,7 +181,7 @@
     observer.disconnect();
     if (desktop.matches) {
       // Hold the big keyboard briefly so it's seen even when the page loads already scrolled to Skills,
-      // then spin it 360 degrees into its smaller resting position before the keys fly out
+      // then spin it 360 degrees across to the right before the keys fly out
       setTimeout(() => {
         stage.classList.remove("is-intro");
         board.classList.add("is-open");
@@ -155,7 +257,10 @@
       flight.finished.then(() => {
         key.classList.add("is-landed");
         remaining -= 1;
-        if (remaining === 0) board.classList.add("is-spent");
+        if (remaining === 0) {
+          board.classList.add("is-spent");
+          keysFinished();
+        }
       }, () => {});
     });
 

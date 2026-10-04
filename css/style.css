@@ -1208,10 +1208,10 @@ html:has(.xp-lightbox[open]) {
 .sk-layout {
 	display: grid;
 	grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-	grid-template-rows: auto 1fr;
+	grid-template-rows: auto auto;
 	grid-template-areas:
-		"groups knowledge"
-		"groups stage";
+		"groups stage"
+		".      knowledge";
 	gap: 24px 32px;
 	align-items: start;
 	/* Caps the cards at ~687px per column on very wide screens */
@@ -1227,6 +1227,8 @@ html:has(.xp-lightbox[open]) {
 	flex-direction: column;
 	gap: 24px;
 	text-align: right;
+	position: relative;
+	z-index: 1;
 }
 
 .sk-group {
@@ -1448,10 +1450,12 @@ html:has(.xp-lightbox[open]) {
 	justify-content: center;
 	min-height: 420px;
 	perspective: 1600px;
+	/* Resting spot: right column, at the intro's size and height (--intro-y is set by JS) */
+	transform: translate(0px, var(--intro-y, 0px)) scale(1.45);
 	transition: transform 1.6s cubic-bezier(0.45, 0.05, 0.25, 1);
 }
 
-/* Intro: keyboard starts large in the middle of the section (--intro-x is set by JS) */
+/* Intro: keyboard starts in the middle of the section (--intro-x is set by JS) */
 .sk-stage.is-intro {
 	transform: translate(var(--intro-x, 0px), var(--intro-y, 0px)) scale(1.45);
 }
@@ -1481,6 +1485,21 @@ html:has(.xp-lightbox[open]) {
 
 .sk-stage.is-intro .sk-board {
 	transform: rotateY(0deg) rotateX(52deg) rotateZ(-398deg);
+}
+
+/* Docked: once Knowledge scrolls into view, the keyboard turns a full circle to the left into the
+   space beside it (below the cards), smaller, with its keys lit again. --dock-* are set by JS. */
+.sk-stage.is-docked {
+	transform: translate(var(--dock-x, 0px), var(--dock-y, 0px)) scale(var(--dock-scale, 1.15));
+}
+
+.sk-stage.is-docked .sk-board {
+	transform: rotateY(28deg) rotateX(52deg) rotateZ(-398deg);
+}
+
+/* Once the keys have flown, the keyboard's keys fade between dark and lit as it docks and returns */
+.sk-board.is-settled .sk-cap {
+	transition: filter 0.8s ease 0.5s;
 }
 
 .sk-socket {
@@ -1514,12 +1533,17 @@ html:has(.xp-lightbox[open]) {
 	filter: brightness(0.35) saturate(0.7);
 }
 
+/* Sits in front of the big keyboard where they overlap */
+/* Below the Secondary programming skills card, on the right; in front of the big keyboard */
 .sk-knowledge {
 	grid-area: knowledge;
-	justify-self: start;
+	position: relative;
+	z-index: 1;
+	justify-self: end;
 	width: fit-content;
 	max-width: 100%;
 	transition: opacity 0.5s ease;
+	margin: 50px 0 50px 0;
 }
 
 @media only screen and (max-width: 990px) {
