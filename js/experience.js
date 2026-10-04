@@ -69,29 +69,32 @@ document.querySelectorAll(".xp-section .xp-timeline").forEach(timeline => {
   update();
 });
 
-// Recognition images: click opens an enlarged view in a native modal <dialog>
+// Lightbox: any [data-lightbox] button (Experience recognition, certificates) opens its image in a
+// native modal <dialog>. Delegated, so buttons rendered later by other scripts work too.
+// Caption comes from data-caption, or the enclosing figure's <figcaption>; alt text from data-alt, or the thumbnail.
 (function () {
   const dialog = document.querySelector(".xp-lightbox");
-  const triggers = document.querySelectorAll("#experience .xp-figure-trigger");
-  if (!dialog || !triggers.length || typeof dialog.showModal !== "function") return;
+  if (!dialog || typeof dialog.showModal !== "function") return;
 
   const img = dialog.querySelector(".xp-lightbox-img");
   const caption = dialog.querySelector(".xp-lightbox-caption");
   let lastTrigger = null;
 
-  triggers.forEach(trigger => {
-    trigger.addEventListener("click", () => {
-      const thumb = trigger.querySelector("img");
-      const figcaption = trigger.closest("figure").querySelector("figcaption");
+  document.addEventListener("click", e => {
+    const trigger = e.target.closest("[data-lightbox]");
+    if (!trigger) return;
 
-      img.src = trigger.dataset.full || thumb.currentSrc || thumb.src;
-      img.alt = thumb.alt;
-      caption.textContent = figcaption ? figcaption.textContent : "";
-      dialog.setAttribute("aria-label", caption.textContent || "Enlarged image");
+    const thumb = trigger.querySelector("img");
+    const figure = trigger.closest("figure");
+    const figcaption = figure && figure.querySelector("figcaption");
 
-      lastTrigger = trigger;
-      dialog.showModal();
-    });
+    img.src = trigger.dataset.full || thumb.currentSrc || thumb.src;
+    img.alt = trigger.dataset.alt || thumb.alt;
+    caption.textContent = trigger.dataset.caption || (figcaption ? figcaption.textContent : "");
+    dialog.setAttribute("aria-label", caption.textContent || "Enlarged image");
+
+    lastTrigger = trigger;
+    dialog.showModal();
   });
 
   dialog.querySelector(".xp-lightbox-close").addEventListener("click", () => dialog.close());
@@ -102,7 +105,9 @@ document.querySelectorAll(".xp-section .xp-timeline").forEach(timeline => {
   });
 
   // Escape is handled natively by <dialog>; return focus to the image that opened it
+  // (The close event arrives asynchronously; skip the cleanup if it was already reopened.)
   dialog.addEventListener("close", () => {
+    if (dialog.open) return;
     img.removeAttribute("src");
     if (lastTrigger) lastTrigger.focus();
   });

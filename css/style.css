@@ -344,10 +344,6 @@ p, li{
 	}
 }
 
-.content>p{
-	padding-left: 1%;
-}
-
 /* Hero / Home Section - Premium Landing Page */
 .hero-section {
 	position: relative;
@@ -522,144 +518,9 @@ p, li{
 	border-width: 1px 0px;
 }
 
-.row{
-	font-family: Garamond , sans-serif;
-	display: inline-block;
-	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-	background-color: #FFFFFF;
-	text-align: center;
-	object-position: center;
-}
-
-.certs-container{
-	margin-left: 5%;
-	display: block;
-	text-align: center;
-	margin: 0 auto;
-}
-
-#section5 .row{
-	width: 43%;
-	height: 26vw;
-	/* margin-left: 4%; */
-	margin-right: 2%;
-	margin-top: 10px;
-	margin-bottom: 34px;
-}
-
-#section5 h3{
-	margin-bottom: 0px;
-}
-
-.card-experience .row{
-	width: 40%;
-	height: 20rem;
-	margin-left: 2%;
-	margin-top: 10px;
-}
-
-section #middle{
-	margin-left: 25%;
-}
-
-.content>p{
-	color: #495057;
-	padding-left: 1%;
-}
-
 div{
 	display: inline;
 }
-
-.card img{
-	/*width: 20em;*/
-	width: 100%;
-	/*height: 78%;*/
-	height: 69%;
-	object-fit: cover; /*This function makes that the images
-	adjust to the width and height established*/
-	display: block;
-	/*background-position: center bottom;*/
-	object-position: center;
-	/*padding-top: 10px;*/
-	border-top: 2px solid red;
-}
-
-#section5 .container{
-	width: 100%;
-	height: 87%;
-	position: relative;
-	display: flex;
-	justify-content: space-between;
-	margin-top: 4%;
-	text-align: center;
-	object-position: center;
-}
-
-.container .card{
-	position: relative;
-	width: 100%;
-	height: 100%;
-}
-
-.container .card .face{
-	position: absolute;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
-	transition: 0.5s;
-}
-
-.container .card .face.face1{
-	background: #333;
-	display: inline-block;
-	justify-content: center;
-	align-items: center;
-	z-index: 1;
-	transform-origin: bottom;
-}
-
-.container .card .face.face1 img{
-	width: 100%;
-	/*height: 78%;*/
-	height: 100%;
-	object-fit: cover; /*This function makes that the images
-	adjust to the width and height established*/
-	display: block;
-	/*background-position: center bottom;*/
-	object-position: center;
-	/*padding-top: 10px;*/
-}
-
-.container .card:hover .face.face1{
-	transform: translateY(-100%) rotateX(90deg);
-	background: #ff0057;
-}
-
-.container .card .face.face2{
-	background: #fff;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	transform-origin: top;
-	transform: translateY(100%) rotateX(90deg);
-	border-top: 2px solid #ff0000;
-}
-
-.container .card .face.face2 p{
-	text-align: justify;
-	margin-left: 5%;
-	margin-right: 5%;
-	font-size: 19px;
-	font-family: 'Inter', sans-serif;
-	color: #0f172a;
-}
-
-.container .card:hover .face.face2{
-	transform: translateY(0%) rotateX(0deg);
-}
-
 
 section h3, section h4{
 	font-family: 'Manrope', sans-serif;
@@ -1597,6 +1458,263 @@ html:has(.xp-lightbox[open]) {
 	}
 }
 
+/* Certifications - credential cards rendered by js/certifications.js.
+   Cards reuse .xp-card, labels reuse .xp-subhead, thumbnails reuse .xp-figure-trigger (dim/hover)
+   and the Experience lightbox. */
+.ct-list {
+	display: grid;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+	gap: 24px;
+	max-width: 1406px;
+	margin: 0 auto;
+}
+
+.ct-card {
+	display: flex;
+	flex-direction: column;
+	transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.ct-card:hover {
+	transform: translateY(-4px);
+	border-color: rgba(255, 255, 255, 0.16);
+}
+
+/* Featured credential: full width, badge on the left, teal accent border and glow */
+.ct-card--featured {
+	grid-column: 1 / -1;
+	display: grid;
+	grid-template-columns: auto minmax(0, 1fr);
+	align-items: center;
+	gap: 36px;
+	border-color: rgba(94, 234, 212, 0.35);
+	box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35), 0 0 32px rgba(94, 234, 212, 0.12);
+}
+
+.ct-card--featured:hover {
+	border-color: rgba(94, 234, 212, 0.6);
+	box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35), 0 0 40px rgba(94, 234, 212, 0.2);
+}
+
+/* The badge opens the full certificate in the lightbox */
+.ct-badge {
+	display: block;
+	width: 160px;
+	padding: 0;
+	background: none;
+	border: none;
+	cursor: pointer;
+	transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+.ct-badge img {
+	display: block;
+	width: 100%;
+	height: auto;
+	filter: drop-shadow(0 10px 24px rgba(0, 0, 0, 0.45));
+}
+
+.ct-badge:hover,
+.ct-badge:focus-visible {
+	transform: scale(1.04);
+	filter: drop-shadow(0 0 18px rgba(94, 234, 212, 0.35));
+	outline: none;
+}
+
+.ct-body {
+	display: flex;
+	flex-direction: column;
+	min-width: 0;
+}
+
+.ct-logo {
+	display: block;
+	align-self: flex-start;
+	height: 40px;
+	width: auto;
+	border-radius: 6px;
+	margin-bottom: 16px;
+}
+
+.xp-section .ct-title {
+	font-family: 'Manrope', sans-serif;
+	font-size: 19px;
+	font-weight: 700;
+	line-height: 1.3;
+	color: #f7f9fb;
+	margin: 0;
+	padding: 0;
+}
+
+.xp-section .ct-card--featured .ct-title {
+	font-size: 24px;
+}
+
+.xp-section .ct-issuer {
+	font-family: 'Inter', sans-serif;
+	font-size: 14px;
+	color: #7c8aa0;
+	margin: 6px 0 0;
+	padding: 0;
+	text-align: left;
+}
+
+.xp-section .ct-desc {
+	font-family: 'Inter', sans-serif;
+	font-size: 15px;
+	line-height: 1.65;
+	color: #a9b4c2;
+	margin: 14px 0 0;
+	padding: 0;
+	text-align: left;
+}
+
+.ct-tags {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+	list-style: none;
+	margin: 16px 0 0;
+	padding: 0;
+}
+
+.ct-tags .ct-tag {
+	font-family: 'Inter', sans-serif;
+	font-size: 12px;
+	line-height: 1.4;
+	color: #a9b4c2;
+	background: rgba(255, 255, 255, 0.03);
+	border: 1px solid rgba(255, 255, 255, 0.12);
+	border-radius: 9999px;
+	padding: 4px 10px;
+}
+
+/* Certificate thumbnail: fixed shape and pushed to the bottom of the card, so thumbnails line up across
+   cards whatever the title/tag lengths; dim/hover come from .xp-figure-trigger */
+.ct-thumb {
+	margin: auto 0 0;
+	padding-top: 20px;
+}
+
+.ct-thumb .xp-figure-trigger {
+	aspect-ratio: 3 / 2;
+}
+
+.ct-thumb .xp-figure-trigger img {
+	height: 100%;
+	object-fit: cover;
+	object-position: top;
+	filter: brightness(0.6);
+}
+
+.ct-thumb .xp-figure-trigger:hover img,
+.ct-thumb .xp-figure-trigger:focus-visible img {
+	filter: brightness(1);
+}
+
+.ct-verify {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	align-self: flex-start;
+	padding-top: 18px;
+	font-family: 'Inter', sans-serif;
+	font-size: 14px;
+	font-weight: 600;
+	color: #5eead4;
+	text-decoration: none;
+	transition: color 0.2s ease;
+}
+
+.ct-card--featured .ct-verify {
+	margin-top: 0;
+}
+
+.ct-verify:hover,
+.ct-verify:focus-visible {
+	color: #99f6e4;
+	text-decoration: underline;
+}
+
+.visually-hidden {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	margin: -1px;
+	padding: 0;
+	overflow: hidden;
+	clip: rect(0 0 0 0);
+	white-space: nowrap;
+	border: 0;
+}
+
+/* Entrance: cards fade and rise once, staggered (classes set by JS, so without JS they just show) */
+.ct-section.is-armed .ct-card {
+	opacity: 0;
+}
+
+.ct-section.is-revealed .ct-card {
+	animation: ct-rise 0.6s cubic-bezier(0.2, 0.7, 0.3, 1) backwards;
+	animation-delay: calc(var(--i, 0) * 120ms);
+}
+
+@keyframes ct-rise {
+	from {
+		opacity: 0;
+		transform: translateY(24px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+/* Tablet: two columns */
+@media only screen and (max-width: 990px) {
+	.ct-list {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+}
+
+/* Phones: one column; the featured card stacks its badge above the text */
+@media only screen and (max-width: 700px) {
+	.ct-list {
+		grid-template-columns: minmax(0, 1fr);
+		gap: 20px;
+	}
+
+	.ct-card--featured {
+		grid-template-columns: minmax(0, 1fr);
+		gap: 20px;
+	}
+
+	.ct-badge {
+		width: 140px;
+		justify-self: center;
+	}
+
+	.xp-section .ct-card--featured .ct-title {
+		font-size: 20px;
+	}
+
+	/* Full brightness on phones (no hover to reveal it), like the Experience image */
+	.ct-thumb .xp-figure-trigger img {
+		filter: none;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.ct-card,
+	.ct-badge {
+		transition: none;
+	}
+
+	.ct-card:hover,
+	.ct-badge:hover {
+		transform: none;
+	}
+}
+
 .project {
 	background: rgba(15, 23, 42, 0.9);
 	border: 1px solid rgba(255, 255, 255, 0.1);
@@ -1909,7 +2027,7 @@ html:has(.xp-lightbox[open]) {
 	}
 
 
-	#section5, #portfolio{
+	#portfolio{
 		min-width: 96.5vw;
 	}
 
@@ -2071,23 +2189,6 @@ html:has(.xp-lightbox[open]) {
 		font-size: 14px;
 	}
 
-	section .row{
-		width: 75%;
-		position: relative;
-		left: 10%;
-	}
-
-	section #middle{
-		margin-left: 2%;
-	}
-
-	.content>p{
-		font-size: 10px;
-		font-weight: 1px;
-		padding-left: 1%;
-		color: #495057;
-	}
-
 	main{
 		width: 100%;
 		margin-left: 0;
@@ -2177,10 +2278,6 @@ html:has(.xp-lightbox[open]) {
 		font-size: 8vh;
 	}
 
-	.container .card .face.face2 p{
-		font-size: 15px;
-	}
-
 	.preview-next {
 		width: 99vw;
 	}
@@ -2193,17 +2290,5 @@ html:has(.xp-lightbox[open]) {
 	.next{
 		padding-right: 5px;
 		margin-top: -38%;
-	}
-
-	#section5 .row{
-		width: 93%;
-		height: 17rem;
-		height: 39vh;
-		margin-left: -15%;
-	}
-
-	.certs-container{
-		margin-left: 0%;
-		display: inline-block;
 	}
 }
