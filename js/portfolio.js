@@ -5,7 +5,8 @@
 //   tech            - names from TECH below (unknown names get a neutral keycap with their first letter)
 //   features        - 3–4 short bullet points
 //   screenshots     - base: image path without the size suffix; the -800 / -<w> / -thumb webp files must exist
-//   crossLink       - optional { href, text } shown at the bottom of the text panel
+//   crossLink       - optional { href, text } shown at the bottom of the text panel; href is a figure whose
+//                     [data-lightbox] image opens in the lightbox
 // Items marked "TODO: verify" were drafted from the Experience section; check them before publishing.
 const PROJECTS = [
   {
@@ -27,7 +28,7 @@ const PROJECTS = [
       { base: "img/ups/2-ups", large: 1366, width: 1600, height: 859, caption: "Planning error logs" },
       { base: "img/ups/3-ups", large: 1366, width: 1600, height: 860, caption: "Planning configuration" }
     ],
-    crossLink: { href: "#ups-recognition", text: "Recognized by UPS: see Experience ↗" }
+    crossLink: { href: "#ups-recognition", text: "Recognized by UPS: view the recognition ↗" }
   },
   {
     title: "Product exchange system",
@@ -61,7 +62,7 @@ const PROJECTS = [
     year: "2022", // TODO: verify
     // TODO: verify description, role and tech
     description: "An office booking system that replaced informal desk and parking arrangements with self-service reservations. Employees book a desk or a parking spot for a given date and time, and managers review attendance in a timesheet.",
-    role: "Full stack developer for the reservation screens and the services behind them.",
+    role: "Plan arquitecture, lead development team and deliver task as full stack developer for the reservation screens and the services behind them.",
     tech: ["Angular", "Java", "SQL"],
     features: [
       "Desk reservation on an interactive floor plan",
@@ -81,7 +82,7 @@ const PROJECTS = [
     year: "2021", // TODO: verify
     // TODO: verify description, role and tech
     description: "A tool that semi-automates new-employee onboarding, from access requests to payroll, so no registration step gets lost. HR staff use it to follow each registration, confirm payroll and keep employee files in one place.",
-    role: "Full stack developer for the registration tracking, payroll confirmation and employee file features.",
+    role: "Lead development and business analyst teams and deliver task as full stack developer for the registration tracking, payroll confirmation and employee file features.",
     tech: ["React", "Node.js", "SQL"],
     features: [
       "New-employee registration table",
@@ -154,7 +155,27 @@ const TECH = {
       el("ul", { className: "pf-tech", "aria-label": "Tech stack" }, ...project.tech.map(techChip)),
       el("p", { className: "xp-subhead pf-label", textContent: "Key features" }),
       el("ul", { className: "xp-list pf-features" }, ...project.features.map(f => el("li", { textContent: f }))),
-      project.crossLink && el("a", { className: "pf-crosslink", href: project.crossLink.href, textContent: project.crossLink.text }));
+      project.crossLink && crossLink(project.crossLink));
+  }
+
+  // Opens the lightbox with the image of the [data-lightbox] button inside the target figure (e.g. the UPS
+  // recognition in Experience), reusing its full-size source, alt text and caption so they stay in one place.
+  function crossLink(link) {
+    const figure = document.querySelector(link.href);
+    const source = figure && figure.querySelector("[data-lightbox]");
+    if (!source) return null;
+    const thumb = source.querySelector("img");
+    const figcaption = figure.querySelector("figcaption");
+    return el("button", {
+      type: "button",
+      className: "pf-crosslink",
+      "data-lightbox": true,
+      "data-full": source.dataset.full || thumb.src,
+      "data-alt": thumb.alt,
+      "data-caption": figcaption ? figcaption.textContent : "",
+      "aria-haspopup": "dialog",
+      textContent: link.text
+    });
   }
 
   // One carousel: browser-frame viewport with cross-fading slides, caption + counter, thumbnails (tablet/desktop)
