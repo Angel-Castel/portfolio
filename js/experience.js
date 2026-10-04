@@ -69,41 +69,73 @@ document.querySelectorAll(".xp-section .xp-timeline").forEach(timeline => {
   update();
 });
 
-// Recognition images: click opens an enlarged view in a native modal <dialog>
+// Lightbox: any [data-lightbox] button (Experience recognition, certificates, portfolio screenshots) opens its
+// image in a native modal <dialog>. Delegated, so buttons rendered later by other scripts work too.
+// Caption comes from data-caption, or the enclosing figure's <figcaption>; alt text from data-alt, or the thumbnail.
+// Buttons sharing a data-lightbox-group form a set: the lightbox then shows prev/next buttons, the arrow keys
+// step through the set, and each step fires a bubbling "lightbox:show" event on that button (so a carousel can follow).
 (function () {
   const dialog = document.querySelector(".xp-lightbox");
-  const triggers = document.querySelectorAll("#experience .xp-figure-trigger");
-  if (!dialog || !triggers.length || typeof dialog.showModal !== "function") return;
+  if (!dialog || typeof dialog.showModal !== "function") return;
 
   const img = dialog.querySelector(".xp-lightbox-img");
   const caption = dialog.querySelector(".xp-lightbox-caption");
-  let lastTrigger = null;
+  let group = [];
+  let index = 0;
 
-  triggers.forEach(trigger => {
-    trigger.addEventListener("click", () => {
-      const thumb = trigger.querySelector("img");
-      const figcaption = trigger.closest("figure").querySelector("figcaption");
+  function show(trigger) {
+    const thumb = trigger.querySelector("img");
+    const figure = trigger.closest("figure");
+    const figcaption = figure && figure.querySelector("figcaption");
 
-      img.src = trigger.dataset.full || thumb.currentSrc || thumb.src;
-      img.alt = thumb.alt;
-      caption.textContent = figcaption ? figcaption.textContent : "";
-      dialog.setAttribute("aria-label", caption.textContent || "Enlarged image");
+    img.src = trigger.dataset.full || thumb.currentSrc || thumb.src;
+    img.alt = trigger.dataset.alt || thumb.alt;
+    caption.textContent = trigger.dataset.caption || (figcaption ? figcaption.textContent : "");
+    dialog.setAttribute("aria-label", caption.textContent || "Enlarged image");
+  }
 
-      lastTrigger = trigger;
-      dialog.showModal();
-    });
+  function step(delta) {
+    if (group.length < 2) return;
+    index = (index + delta + group.length) % group.length;
+    show(group[index]);
+    group[index].dispatchEvent(new CustomEvent("lightbox:show", { bubbles: true }));
+  }
+
+  document.addEventListener("click", e => {
+    const trigger = e.target.closest("[data-lightbox]");
+    if (!trigger) return;
+
+    const name = trigger.dataset.lightboxGroup;
+    group = name
+      ? Array.from(document.querySelectorAll(`[data-lightbox][data-lightbox-group="${CSS.escape(name)}"]`))
+      : [trigger];
+    index = Math.max(0, group.indexOf(trigger));
+    dialog.classList.toggle("has-nav", group.length > 1);
+
+    show(trigger);
+    dialog.showModal();
   });
 
   dialog.querySelector(".xp-lightbox-close").addEventListener("click", () => dialog.close());
+  dialog.querySelector(".xp-lightbox-prev").addEventListener("click", () => step(-1));
+  dialog.querySelector(".xp-lightbox-next").addEventListener("click", () => step(1));
 
-  // Any click outside the image itself (backdrop, empty space, caption) closes the lightbox
-  dialog.addEventListener("click", e => {
-    if (e.target !== img) dialog.close();
+  dialog.addEventListener("keydown", e => {
+    if (e.key === "ArrowLeft") { step(-1); e.preventDefault(); }
+    if (e.key === "ArrowRight") { step(1); e.preventDefault(); }
   });
 
-  // Escape is handled natively by <dialog>; return focus to the image that opened it
+  // Any click outside the image and the prev/next buttons (backdrop, empty space, caption) closes the lightbox
+  dialog.addEventListener("click", e => {
+    if (e.target !== img && !e.target.closest(".xp-lightbox-nav")) dialog.close();
+  });
+
+  // Escape is handled natively by <dialog>; return focus to the image now showing (a carousel following
+  // the lightbox has made it the active one). The close event arrives asynchronously, so skip the
+  // cleanup if the lightbox was already reopened.
   dialog.addEventListener("close", () => {
+    if (dialog.open) return;
     img.removeAttribute("src");
-    if (lastTrigger) lastTrigger.focus();
+    if (group[index]) group[index].focus();
   });
 })();
