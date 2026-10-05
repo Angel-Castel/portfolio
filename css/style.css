@@ -261,11 +261,11 @@ p, li{
 	line-height: 1.65;
 }
 
-#home > h3, #about > h3{
+#home > h3{
 	margin-bottom: 5%;
 }
 
-#home>div, #about>div{
+#home>div{
 	position: absolute;
 }
 
@@ -2241,6 +2241,414 @@ html:has(.xp-lightbox[open]) {
 
 	.pf-browser:hover {
 		transform: none;
+	}
+}
+
+/* About me - full-bleed photo section that closes the site the way the hero opens it.
+   Overlay layout (landscape screens): the <picture> is 140% of the section's width and anchored right, so the
+   left of the photo is cropped and Angel sits ~30% from the left; the text block sits on the right over a
+   gradient. When the section is taller than that box, the photo grows to cover it while Angel stays at
+   --ab-person-x (container query units, so this tracks the section's real size). Stacked layout (phones and portrait screens): the photo on top, the text below on navy. */
+.xp-section.ab-section {
+	--ab-pad-right: clamp(40px, 7.6vw, 110px);
+	--ab-text-w: min(842px, 46vw);
+	/* Left edge of the text block, as a position along the section's width (used by the gradient) */
+	--ab-text-left: calc(100% - var(--ab-pad-right) - var(--ab-text-w));
+	/* Width of the eased ramp from clear to dark that ends at the text */
+	--ab-ramp: clamp(200px, 21vw, 320px);
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+	min-height: 100vh;
+	padding: 110px var(--ab-pad-right) 90px;
+	isolation: isolate;
+}
+
+.ab-photo {
+	position: absolute;
+	inset: 0;
+	z-index: 0;
+	display: block;
+	overflow: hidden;
+	pointer-events: none;
+	container-type: size;
+	--ab-person-x: 30cqw;
+	--ab-photo-w: max(140cqw, 177.7cqh);
+}
+
+/* Fallback first (140% wide, anchored right); browsers with container queries then place the photo so
+   Angel (the photo's horizontal centre) sits at --ab-person-x and the photo is anchored 40% vertically */
+.ab-photo picture {
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	display: block;
+	width: 140%;
+	width: var(--ab-photo-w);
+	height: auto;
+	aspect-ratio: 1672 / 941;
+	left: calc(var(--ab-person-x) - var(--ab-photo-w) / 2);
+	top: calc((100cqh - var(--ab-photo-w) / 1.7768) * 0.4);
+	bottom: auto;
+}
+
+/* Never mirrored: the peace sign and the shirt logo must read the right way round */
+.ab-photo-img {
+	display: block;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	object-position: 100% 40%;
+	transform-origin: 50% 40%;
+}
+
+/* Top and bottom fades into the neighbouring navy, plus an orange glow on the right edge and its mirror
+   image (same stops, "to left") on the left edge. The ramps are tied to the text block's left edge. */
+.ab-shade {
+	position: absolute;
+	inset: 0;
+	z-index: 1;
+	display: block;
+	pointer-events: none;
+	background: linear-gradient(to bottom, #050a12 0, rgba(5, 10, 18, 0.6) 56px, rgba(5, 10, 18, 0) 150px), linear-gradient(to top, #050a12 0, rgba(5, 10, 18, 0.6) 56px, rgba(5, 10, 18, 0) 150px), linear-gradient(to right, rgba(227, 255, 29, 0) 0%, rgba(4, 8, 16, 0) calc(var(--ab-text-left) - var(--ab-ramp)), rgba(4, 8, 16, 0), rgba(4, 8, 16, 0.07) calc(var(--ab-text-left) - var(--ab-ramp) * 0.24), rgba(4, 8, 16, 0.07) var(--ab-text-left), rgb(255, 156, 1) 100%), linear-gradient(to left, rgba(227, 255, 29, 0) 0%, rgba(4, 8, 16, 0) calc(var(--ab-text-left) - var(--ab-ramp)), rgba(4, 8, 16, 0), rgba(4, 8, 16, 0.07) calc(var(--ab-text-left) - var(--ab-ramp) * 0.24), rgba(4, 8, 16, 0.07) var(--ab-text-left), rgb(255, 156, 1) 100%);
+}
+
+.ab-content {
+	position: relative;
+	z-index: 2;
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+	max-width: var(--ab-text-w);
+	text-align: left;
+}
+
+.xp-section .ab-eyebrow {
+	margin: 0 0 14px;
+	text-align: left;
+}
+
+.ab-section .ab-title {
+	font-family: 'Manrope', sans-serif;
+	font-size: clamp(40px, 4vw, 56px);
+	font-weight: 800;
+	line-height: 1.1;
+	margin: 0;
+	padding: 0;
+	padding-bottom: 7px;
+	/* The original animated rainbow name (same as the Experience role titles) */
+	color: transparent;
+	background-image: linear-gradient(to right, #f00, #ff0, #0f0, #00f);
+	background-size: 1000%;
+	background-clip: text;
+	-webkit-background-clip: text;
+	animation: animate 20s linear infinite;
+}
+
+.ab-section .ab-role {
+	font-family: 'Manrope', sans-serif;
+	font-size: 22px;
+	font-weight: 500;
+	line-height: 1.35;
+	color: #c3cbd6;
+	margin: 0;
+	padding: 0;
+}
+
+/* Role and bio share one large card, the same .xp-card used by the Skills groups */
+.ab-card {
+	margin-top: 22px;
+}
+
+.ab-bio {
+	display: block;
+	margin-top: 14px;
+}
+
+.ab-section .ab-bio p {
+	font-family: 'Inter', sans-serif;
+	font-size: 17px;
+	line-height: 1.65;
+	color: #a9b4c2;
+	margin: 0 0 14px;
+	padding: 0;
+	text-align: left;
+}
+
+.ab-section .ab-bio p:last-child {
+	margin-bottom: 0;
+}
+
+/* Quick facts: dark-glass chips in the site's card style */
+.ab-facts {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+	list-style: none;
+	margin: 24px 0 0;
+	padding: 0;
+}
+
+.ab-section .ab-chip {
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	padding: 8px 14px;
+	font-family: 'Inter', sans-serif;
+	font-size: 13px;
+	font-weight: 500;
+	line-height: 1.3;
+	color: #cbd5e1;
+	background: rgba(10, 18, 32, 0.55);
+	border: 1px solid rgba(255, 255, 255, 0.1);
+	border-radius: 9999px;
+	backdrop-filter: blur(8px);
+	-webkit-backdrop-filter: blur(8px);
+}
+
+.ab-chip i {
+	flex: none;
+	font-size: 12px;
+	color: var(--xp-amber);
+}
+
+.ab-actions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 14px;
+	margin-top: 28px;
+}
+
+/* Secondary button: outline version of the hero's pill */
+.ab-section .ab-btn--outline {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 10px;
+	padding: 13px 27px;
+	font-family: 'Inter', sans-serif;
+	font-size: 15px;
+	font-weight: 700;
+	color: #5eead4;
+	text-decoration: none;
+	background: transparent;
+	border: 1px solid #5eead4;
+	border-radius: 9999px;
+	transition: all 0.25s ease;
+}
+
+.ab-section .ab-btn--outline:hover {
+	color: #99f6e4;
+	background: rgba(94, 234, 212, 0.1);
+	box-shadow: 0 0 24px 2px rgba(94, 234, 212, 0.3);
+	transform: translateY(-1px);
+}
+
+.ab-section .ab-btn:focus-visible,
+.ab-social-link:focus-visible,
+.site-footer-top:focus-visible {
+	outline: 2px solid #5eead4;
+	outline-offset: 3px;
+}
+
+.ab-social {
+	display: flex;
+	gap: 12px;
+	margin-top: 24px;
+}
+
+.ab-social-link {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 44px;
+	height: 44px;
+	color: #cbd5e1;
+	background: rgba(10, 18, 32, 0.45);
+	border: 1px solid rgba(255, 255, 255, 0.15);
+	border-radius: 50%;
+	transition: color 0.25s ease, background-color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+/* !important: the legacy .fa-github colour rule is !important too */
+.ab-social-link i {
+	position: static;
+	margin: 0;
+	font-size: 18px;
+	color: inherit !important;
+}
+
+.ab-social-link:hover,
+.ab-social-link:focus-visible {
+	color: #5eead4;
+	background: rgba(94, 234, 212, 0.1);
+	border-color: rgba(94, 234, 212, 0.6);
+	box-shadow: 0 0 16px rgba(94, 234, 212, 0.35);
+}
+
+/* Entrance: eyebrow, title, role, bio, chips, buttons and icons slide in from the right (classes set by
+   js/about.js, once per visit); the photo starts a slow zoom at the same time */
+.ab-section.is-armed .ab-reveal {
+	opacity: 0;
+	transform: translateX(40px);
+}
+
+.ab-section.is-revealed .ab-reveal {
+	opacity: 1;
+	transform: none;
+	transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.2, 0.7, 0.3, 1);
+	transition-delay: calc(var(--i, 0) * 90ms);
+}
+
+.ab-section.is-revealed .ab-photo-img {
+	animation: ab-zoom 20s ease-out forwards;
+}
+
+@keyframes ab-zoom {
+	from {
+		transform: scale(1);
+	}
+	to {
+		transform: scale(1.04);
+	}
+}
+
+/* Footer: one slim line */
+.site-footer {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 16px;
+	padding: 22px clamp(20px, 7.6vw, 110px);
+	background: #050a12;
+	border-top: 1px solid rgba(255, 255, 255, 0.08);
+	font-family: 'Inter', sans-serif;
+	font-size: 13px;
+	color: #7c8aa0;
+}
+
+.site-footer .site-footer-copy {
+	margin: 0;
+	padding: 0;
+	font-size: inherit;
+	line-height: 1.5;
+	color: inherit;
+	text-align: left;
+}
+
+.site-footer-top {
+	color: #7c8aa0;
+	text-decoration: none;
+	transition: color 0.2s ease;
+}
+
+.site-footer-top:hover {
+	color: #5eead4;
+}
+
+/* Small landscape screens: narrower text block, Angel moved further left; the gradient follows the text */
+@media only screen and (min-width: 768px) and (max-width: 1023px) {
+	.xp-section.ab-section {
+		--ab-pad-right: 40px;
+		--ab-text-w: min(440px, 48vw);
+	}
+
+	.ab-photo {
+		--ab-person-x: 24cqw;
+	}
+}
+
+/* Stacked layout: phones, and portrait screens where the wide photo cannot keep Angel clear of the text */
+@media only screen and (max-width: 767px), (max-aspect-ratio: 1/1) {
+	.xp-section.ab-section {
+		display: block;
+		min-height: 0;
+		padding: 0 0 64px;
+	}
+
+	.ab-photo {
+		position: relative;
+		inset: auto;
+		height: 60vh;
+		min-height: 340px;
+		container-type: normal;
+	}
+
+	.ab-photo picture {
+		position: static;
+		width: 100%;
+		height: 100%;
+		aspect-ratio: auto;
+	}
+
+	.ab-photo-img {
+		object-position: 50% 35%;
+		transform-origin: 50% 35%;
+	}
+
+	/* Fade in from the Portfolio section above and out into the navy behind the text */
+	.ab-photo::after {
+		content: "";
+		position: absolute;
+		inset: 0;
+		background:
+			linear-gradient(to bottom, #050a12 0, rgba(5, 10, 18, 0) 90px),
+			linear-gradient(to top, #050a12 0, rgba(5, 10, 18, 0.7) 50px, rgba(5, 10, 18, 0) 140px);
+	}
+
+	.ab-shade {
+		display: none;
+	}
+
+	.ab-content {
+		max-width: 680px;
+		margin: -24px auto 0;
+		padding: 0 40px;
+	}
+}
+
+@media only screen and (max-width: 767px) {
+	.ab-content {
+		padding: 0 20px;
+	}
+
+	.ab-section .ab-title {
+		font-size: 36px;
+	}
+
+	.ab-section .ab-role {
+		font-size: 19px;
+	}
+
+	.ab-section .ab-bio p {
+		font-size: 16px;
+	}
+
+	.ab-actions {
+		flex-direction: column;
+	}
+
+	.ab-actions .ab-btn {
+		width: 100%;
+		justify-content: center;
+	}
+
+	.site-footer {
+		padding: 18px 20px;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.ab-section.is-revealed .ab-photo-img,
+	.ab-section .ab-title {
+		animation: none;
+	}
+
+	.ab-section.is-revealed .ab-reveal,
+	.ab-section .ab-btn--outline,
+	.ab-social-link {
+		transition: none;
 	}
 }
 
