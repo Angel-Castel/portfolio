@@ -360,17 +360,51 @@
 			</div>
 		</section>
 
-		<section id="about" class="fullpage page-container">
-			<h1>Angel Castellanos</h1>
-			<h3>Full Stack Software Engineer</h3>
-			<p>I am a technology enthusiast and Full Stack Software Engineer passionate about web development, continuous learning, and building innovative software solutions.</p>
-			<div class="ext-links">
-				<a href="https://github.com/Angel-Castel" class="fab fa-github"></a>
-				<a href="https://www.linkedin.com/in/angel-castellanos-rendon/" class="fab fa-linkedin"></a>
+		<section id="about" class="xp-section ab-section" aria-labelledby="about-title">
+			<!-- Desktop: the photo is wider than the section and anchored right, so Angel sits in the left third.
+			     Stacked layout (phones, portrait screens): a portrait crop above the text. -->
+			<div class="ab-photo">
+				<picture>
+					<source media="(max-width: 767px), (max-aspect-ratio: 1/1)" srcset="img/about/about-portrait-752.webp" width="752" height="941">
+					<img src="img/about/about-1672.webp" alt="Angel Castellanos on a hilltop at sunset" class="ab-photo-img" width="1672" height="941" loading="lazy" decoding="async">
+				</picture>
+			</div>
+			<div class="ab-shade" aria-hidden="true"></div>
+			<div class="ab-content">
+				<p class="xp-eyebrow ab-eyebrow ab-reveal" style="--i: 0">About me</p>
+				<h2 class="ab-title ab-reveal" id="about-title" style="--i: 1">Angel Castellanos</h2>
+				<div class="xp-card ab-card ab-reveal" style="--i: 2">
+					<p class="ab-role">Full Stack Software Engineer</p>
+					<div class="ab-bio">
+						<p>I'm a full stack software engineer who builds enterprise web applications end to end: Angular and React on the front end, Java, Spring Boot and Node.js behind them. I'm currently at Tata Consultancy Services, working on network planning software for UPS and AON.</p>
+						<p>I take ownership of my work: I meet deadlines, respect the specs and work well with my team. And I like to bring a touch of creativity and artistry to the code I write.</p>
+						<p>When I'm not coding, you'll usually find me in the mountains, hiking or on a mountain bike.</p>
+					</div>
+				</div>
+				<ul class="ab-facts ab-reveal" style="--i: 3" aria-label="Quick facts">
+					<li class="ab-chip"><i class="fa-solid fa-code" aria-hidden="true"></i>5+ years building software</li>
+					<li class="ab-chip"><i class="fa-solid fa-layer-group" aria-hidden="true"></i>Angular &middot; React &middot; Java &middot; Spring Boot</li>
+					<li class="ab-chip"><i class="fa-solid fa-award" aria-hidden="true"></i>Recognized by UPS &middot; 2024</li>
+					<li class="ab-chip"><i class="fa-solid fa-location-dot" aria-hidden="true"></i>Based in Mexico City, Mexico &middot; Open to remote</li>
+				</ul>
+				<div class="ab-actions ab-reveal" style="--i: 4">
+					<a href="mailto:angel.casren@gmail.com" class="hero-cta-btn ab-btn">Get in touch <i class="fa-solid fa-envelope" aria-hidden="true"></i></a>
+					<!-- TODO: add the CV file at this path -->
+					<a href="docs/Angel-Castellanos-CV.pdf" class="ab-btn ab-btn--outline" download>Download CV <i class="fa-solid fa-download" aria-hidden="true"></i></a>
+				</div>
+				<div class="ab-social ab-reveal" style="--i: 5">
+					<a href="https://github.com/Angel-Castel" class="ab-social-link" target="_blank" rel="noopener noreferrer" aria-label="GitHub (opens in a new tab)"><i class="fa-brands fa-github" aria-hidden="true"></i></a>
+					<a href="https://www.linkedin.com/in/angel-castellanos-rendon/" class="ab-social-link" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn (opens in a new tab)"><i class="fa-brands fa-linkedin-in" aria-hidden="true"></i></a>
+				</div>
 			</div>
 		</section>
 
 	</main>
+
+	<footer class="site-footer">
+		<p class="site-footer-copy">&copy; 2026 Angel Castellanos</p>
+		<a href="#home" class="site-footer-top">Back to top <span aria-hidden="true">&uarr;</span></a>
+	</footer>
 
 </body>
 	<script src="js/menu.js"></script>
@@ -378,6 +412,7 @@
 	<script src="js/skills.js"></script>
 	<script src="js/certifications.js"></script>
 	<script src="js/portfolio.js"></script>
+	<script src="js/about.js"></script>
 	<script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
 	<script type="text/javascript">
 		$(document).ready(function(){
