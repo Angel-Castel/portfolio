@@ -2303,15 +2303,17 @@ html:has(.xp-lightbox[open]) {
 	transform-origin: 50% 40%;
 }
 
-/* Top and bottom fades into the neighbouring navy, plus an orange glow on the right edge and its mirror
-   image (same stops, "to left") on the left edge. The ramps are tied to the text block's left edge. */
+/* Top and bottom fades into the neighbouring navy, plus the right-side gradient behind the text only;
+   the left side keeps the photo's natural sunset colours. The side gradient is tied to the text block's
+   left edge (not fixed percentages) so the bright sky behind the first words is always dark enough for
+   4.5:1 contrast, while it stays transparent over Angel. */
 .ab-shade {
 	position: absolute;
 	inset: 0;
 	z-index: 1;
 	display: block;
 	pointer-events: none;
-	background: linear-gradient(to bottom, #050a12 0, rgba(5, 10, 18, 0.6) 56px, rgba(5, 10, 18, 0) 150px), linear-gradient(to top, #050a12 0, rgba(5, 10, 18, 0.6) 56px, rgba(5, 10, 18, 0) 150px), linear-gradient(to right, rgba(227, 255, 29, 0) 0%, rgba(4, 8, 16, 0) calc(var(--ab-text-left) - var(--ab-ramp)), rgba(4, 8, 16, 0), rgba(4, 8, 16, 0.07) calc(var(--ab-text-left) - var(--ab-ramp) * 0.24), rgba(4, 8, 16, 0.07) var(--ab-text-left), rgb(255, 156, 1) 100%), linear-gradient(to left, rgba(227, 255, 29, 0) 0%, rgba(4, 8, 16, 0) calc(var(--ab-text-left) - var(--ab-ramp)), rgba(4, 8, 16, 0), rgba(4, 8, 16, 0.07) calc(var(--ab-text-left) - var(--ab-ramp) * 0.24), rgba(4, 8, 16, 0.07) var(--ab-text-left), rgb(255, 156, 1) 100%);
+	background: linear-gradient(to bottom, #050a12 0, rgba(5, 10, 18, 0.6) 56px, rgba(5, 10, 18, 0) 150px), linear-gradient(to top, #050a12 0, rgba(5, 10, 18, 0.6) 56px, rgba(5, 10, 18, 0) 150px), linear-gradient(to right, rgba(227, 255, 29, 0) 0%, rgba(4, 8, 16, 0) calc(var(--ab-text-left) - var(--ab-ramp)), rgba(4, 8, 16, 0), rgba(4, 8, 16, 0.07) calc(var(--ab-text-left) - var(--ab-ramp) * 0.24), rgba(4, 8, 16, 0.07) var(--ab-text-left), rgb(255, 156, 1) 100%);
 }
 
 .ab-content {
