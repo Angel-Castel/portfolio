@@ -4,6 +4,12 @@ document.querySelectorAll(".xp-section .xp-timeline").forEach(timeline => {
   const lit = timeline.querySelector(".xp-line-lit");
   const head = timeline.querySelector(".xp-line-head");
   const nodes = Array.from(timeline.querySelectorAll(".xp-node"));
+  const entries = nodes.map(node => node.closest(".xp-entry"));
+
+  // Bullet index for the staggered reveal of each details card
+  timeline.querySelectorAll(".xp-details").forEach(card => {
+    card.querySelectorAll("li").forEach((li, i) => li.style.setProperty("--li", i));
+  });
 
   // Height of the viewport (as a fraction) where the leading edge of the lit line sits
   const ANCHOR = 0.6;
@@ -37,7 +43,10 @@ document.querySelectorAll(".xp-section .xp-timeline").forEach(timeline => {
     timeline.classList.toggle("is-drawing", progress > 0 && progress < 1);
 
     nodes.forEach((node, i) => {
-      node.classList.toggle("is-active", litPx >= nodeOffsets[i]);
+      const active = litPx >= nodeOffsets[i];
+      node.classList.toggle("is-active", active);
+      // The entry's content is revealed with its node and then stays; only the line and nodes dim going back up
+      if (active) entries[i].classList.add("is-lit");
     });
   }
 

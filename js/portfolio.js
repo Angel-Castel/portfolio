@@ -313,7 +313,19 @@ const TECH = {
   const rows = Array.from(list.querySelectorAll(".pf-row"));
   const desktop = window.matchMedia("(min-width: 1024px)").matches;
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  if (!desktop || reducedMotion || !("IntersectionObserver" in window)) return;
+
+  // Phones and tablets: a simple rise through the shared reveal (js/reveal.js), carousel first, then the text
+  if (!desktop) {
+    rows.forEach(row => {
+      [row.querySelector(".pf-media"), row.querySelector(".pf-panel")].forEach((part, i) => {
+        part.dataset.reveal = "up";
+        part.style.setProperty("--i", i);
+      });
+    });
+    return;
+  }
+
+  if (reducedMotion || !("IntersectionObserver" in window)) return;
 
   section.classList.add("is-armed");
   const observer = new IntersectionObserver(entries => {
