@@ -63,7 +63,7 @@ const CERTIFICATIONS = [
 ];
 
 (function () {
-  const section = document.getElementById("section5");
+  const section = document.getElementById("certifications");
   const list = section && section.querySelector(".ct-list");
   if (!list) return;
 
